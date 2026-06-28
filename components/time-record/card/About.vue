@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { _$t } from "~/utils/i18n";
+
 defineProps<{
   timeRecord: TimeRecordMap;
 }>();
