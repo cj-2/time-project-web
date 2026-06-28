@@ -1,97 +1,96 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: {
-    enabled: true,
+	devtools: {
+		enabled: true,
 
-    timeline: {
-      enabled: true,
-    },
-  },
-  ssr: true,
+		timeline: {
+			enabled: true,
+		},
+	},
+	ssr: true,
 
-  experimental: {
-    inlineRouteRules: true,
-  },
+	experimental: {
+		inlineRouteRules: true,
+	},
 
-  imports: {
-    dirs: ["composables/**", "utils/**"],
-  },
+	imports: {
+		dirs: ["composables/**", "utils/**"],
+	},
 
-  build: {
-    transpile: ["@vuepic/vue-datepicker"],
-  },
+	build: {
+		transpile: ["@vuepic/vue-datepicker"],
+	},
 
-  modules: [
-    "@pinia/nuxt",
-    "@nuxt/image",
-    "@pinia/colada-nuxt",
-    "@nuxtjs/robots",
-    "@nuxtjs/i18n",
-    "nuxt-gtag",
-    "pinia-plugin-persistedstate/nuxt",
-    "nuxt-clarity-analytics",
-    "@nuxtjs/turnstile",
-    "@nuxtjs/seo",
-    "@nuxtjs/tailwindcss",
-    "@nuxtjs/color-mode",
-    "shadcn-nuxt",
-    "nuxt-auth-utils",
-  ],
+	modules: [
+		"@pinia/nuxt",
+		// "@nuxt/image",
+		"@pinia/colada-nuxt",
+		"@nuxtjs/robots",
+		"@nuxtjs/i18n",
+		// "nuxt-gtag",
+		"pinia-plugin-persistedstate/nuxt",
+		// "nuxt-clarity-analytics",
+		"@nuxtjs/turnstile",
+		// "@nuxtjs/seo",
+		"@nuxtjs/tailwindcss",
+		"@nuxtjs/color-mode",
+		"shadcn-nuxt",
+		"nuxt-auth-utils",
+	],
 
-  shadcn: {
-    prefix: "",
-    /**
-     * Directory that the component lives in.
-     * @default "./components/ui"
-     */
-    componentDir: "./components/ui",
-  },
+	shadcn: {
+		prefix: "",
+		/**
+		 * Directory that the component lives in.
+		 * @default "./components/ui"
+		 */
+		componentDir: "./components/ui",
+	},
 
-  site: {
-    url: "https://registrameutempoai.com.br",
-    name: "Registra meu tempo aí!",
-  },
+	site: {
+		url: "https://registrameutempoai.com.br",
+		name: "Registra meu tempo aí!",
+	},
 
-  seo: {
-    fallbackTitle: false,
-  },
+	// seo: {
+	// 	fallbackTitle: false,
+	// },
 
-  colorMode: {
-    preference: "dark",
-    classSuffix: "",
-  },
+	colorMode: {
+		preference: "dark",
+		classSuffix: "",
+	},
 
-  i18n: {
-    vueI18n: "./i18n.config.ts",
-  },
+	i18n: {
+		vueI18n: "./i18n.config.ts",
+	},
 
-  gtag: {
-    enabled: process.env.NODE_ENV === "production",
-    id: process.env.GTAG,
-  },
+	// gtag: {
+	// 	enabled: process.env.NODE_ENV === "production",
+	// 	id: process.env.GTAG,
+	// },
 
-  piniaPluginPersistedstate: {
-    debug: true,
-  },
+	piniaPluginPersistedstate: {
+		debug: true,
+	},
 
-  runtimeConfig: {
-    public: {
-      externalBaseURL: "",
+	runtimeConfig: {
+		public: {
+			externalBaseURL: "",
 
-      onlyGuestMode: "0",
-      enableWarTools: "",
-      oldUserToken: "",
+			onlyGuestMode: "0",
+			enableWarTools: "",
+			oldUserToken: "",
 
-      registerFormMockEnable: "0",
-      registerFormMockName: "",
-      registerFormMockEmail: "",
-      registerFormMockCode: "",
-      registerFormMockPassword: "",
+			registerFormMockEnable: "0",
+			registerFormMockName: "",
+			registerFormMockEmail: "",
+			registerFormMockPassword: "",
 
-      enableUserChallenge: process.env.NODE_ENV === "production",
-    },
-    externalBaseURL: "",
-  },
+			enableUserChallenge: process.env.NODE_ENV === "production",
+		},
+		externalBaseURL: "",
+	},
 
-  compatibilityDate: "2024-10-09",
+	compatibilityDate: "2024-10-09",
 });
