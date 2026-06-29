@@ -4,7 +4,7 @@ import { ptBR } from "date-fns/locale";
 import { defineStore } from "pinia";
 
 export const useRecordHistoryStore = defineStore(
-  "time-record-history-store",
+  "record-history-store",
   () => {
     const {
       query: paginationQuery,

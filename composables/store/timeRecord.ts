@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 
 export const useRecordStore = defineStore(
-  "time-record-store-0001",
+  "record-store-0001",
   () => {
     const {
       query: paginationQuery,

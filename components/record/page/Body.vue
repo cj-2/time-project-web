@@ -88,11 +88,11 @@ const refreshPeriodCallback = async () => {
     <section class="flex flex-col gap-10 md:gap-5 w-full">
       <section class="flex flex-col md:flex-row gap-10">
         <section class="w-full">
-          <RecordPageHeader :time-record="record" :is-fetch="isLoading">
+          <RecordPageHeader :record="record" :is-fetch="isLoading">
             <template #button>
               <RecordButtonEdit
                 v-if="actualRecordId && record"
-                :time-record="record"
+                :record="record"
                 :callback="refreshRecord"
               />
             </template>
@@ -106,7 +106,7 @@ const refreshPeriodCallback = async () => {
               :id="actualRecordId"
               :code="record.code"
               :title="record.name"
-              :post-time-period-callback="refreshPeriodCallback"
+              :post-period-callback="refreshPeriodCallback"
             />
 
             <template #fallback>

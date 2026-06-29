@@ -42,6 +42,6 @@ defineProps<{
       <span class="font-normal">{{ record.code }}</span>
     </p>
 
-    <RecordCardAbout :time-record="record" />
+    <RecordCardAbout :record="record" />
   </section>
 </template>

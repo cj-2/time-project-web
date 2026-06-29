@@ -20,8 +20,8 @@ definePageMeta({
         <HistoryDayList
           ref="historyTp"
           v-if="actualRecordId"
-          :time-record-id="actualRecordId"
-          :time-record="record"
+          :record-id="actualRecordId"
+          :record="record"
           :callback="refreshPeriodCallback"
           :updated-on="updatedOn"
           :clear-updated-on="clearUpdatedOn"

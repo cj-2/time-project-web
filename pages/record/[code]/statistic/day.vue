@@ -9,8 +9,8 @@ useHead({ title: "Resumo Diário" });
       #default="{ actualRecordId, updatedOn, clearUpdatedOn, record }"
     >
       <StatisticDay
-        :time-record-id="actualRecordId"
-        :time-record="record"
+        :record-id="actualRecordId"
+        :record="record"
         :updated-on="updatedOn"
         :clear-updated-on="clearUpdatedOn"
       />

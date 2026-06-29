@@ -3,4 +3,4 @@ export interface RecordTableBusEvent {
   data: RecordTable;
 }
 
-export const TR_TABLE_BUS_NAME = "time-record-table";
+export const TR_TABLE_BUS_NAME = "record-table";

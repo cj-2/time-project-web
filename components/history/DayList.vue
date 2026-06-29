@@ -224,13 +224,13 @@ defineExpose({
 
         <div v-if="recordId" class="flex gap-5 flex-row items-start mt-1">
           <TimeMinuteButtonAdd
-            :time-record-id="recordId"
+            :record-id="recordId"
             :disabled="isFetchNow"
             @open="createTimeMinute"
           />
 
           <PeriodButtonAdd
-            :time-record-id="recordId"
+            :record-id="recordId"
             :disabled="isFetchNow"
             @open="createPeriod"
           />
@@ -442,10 +442,7 @@ defineExpose({
                   <Separator class="my-2" label="Ações" />
 
                   <section>
-                    <PeriodButtonEdit
-                      :time-period="period"
-                      @open="editPeriod"
-                    />
+                    <PeriodButtonEdit :period="period" @open="editPeriod" />
 
                     <Button
                       variant="ghost"
@@ -548,7 +545,7 @@ defineExpose({
       </DialogHeader>
 
       <PeriodFormCreateAndUpdate
-        :time-record-id="tpModal.recordId"
+        :record-id="tpModal.recordId"
         :edit-object="tpModal.form"
         @close="closePeriodCallback"
       />
@@ -567,7 +564,7 @@ defineExpose({
       </DialogHeader>
 
       <TimeMinuteFormCreateAndUpdate
-        :time-record-id="tmModal.recordId"
+        :record-id="tmModal.recordId"
         :callback
         @close="closeTimeMinuteCallback"
       />

@@ -3,4 +3,4 @@ export interface RecordLocalTableBusEvent {
   data: RecordLocalTable;
 }
 
-export const TRL_TABLE_BUS_NAME = "time-record-local-table";
+export const TRL_TABLE_BUS_NAME = "record-local-table";

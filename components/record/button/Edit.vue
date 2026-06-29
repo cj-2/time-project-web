@@ -64,7 +64,7 @@ const closeRecordModal = () => {
 
       <RecordFormCreateAndUpdate
         :edit-object="editRecordObject"
-        hide-time-periods
+        hide-periods
         @close="closeRecordModal"
       />
     </DialogContent>
