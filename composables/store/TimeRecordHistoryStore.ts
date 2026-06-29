@@ -35,7 +35,7 @@ export const useTimeRecordHistoryStore = defineStore(
       try {
         const data = await timeRecordApi().getHistory(
           paginationQuery.value,
-          timeRecordId.value!
+          timeRecordId.value!,
         );
         if (data) apiRes.value = data;
       } catch (error) {
@@ -87,7 +87,7 @@ export const useTimeRecordHistoryStore = defineStore(
         const day = days.find(
           (i) =>
             format(new Date(i.date), "dd/MM/yyyy") ===
-            format(new Date(d.date), "dd/MM/yyyy")
+            format(new Date(d.date), "dd/MM/yyyy"),
         );
         if (!day) return;
 
@@ -106,9 +106,16 @@ export const useTimeRecordHistoryStore = defineStore(
             locale: ptBR,
           }) || [],
         datasets: [
+          // {
+          //   label: "Horas",
+          //   data: chartData.value.map((i) => i.timeInHours) || [],
+          //   borderColor: "rgb(99, 102, 241)",
+          //   backgroundColor: "rgba(99, 102, 241, 0.1)",
+          //   fill: true,
+          // },
           {
-            label: "Horas",
-            data: chartData.value.map((i) => i.timeInHours) || [],
+            label: "Minutos",
+            data: chartData.value.map((i) => i.timeInMinutes) || [],
             borderColor: "rgb(99, 102, 241)",
             backgroundColor: "rgba(99, 102, 241, 0.1)",
             fill: true,
@@ -142,5 +149,5 @@ export const useTimeRecordHistoryStore = defineStore(
   },
   {
     persist: false,
-  }
+  },
 );

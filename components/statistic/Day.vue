@@ -37,7 +37,7 @@ const isFetchStatistics = ref(false);
 
 onMounted(() => {
   if (props.timeRecordId) {
-    updateTimeRecordPageBreadcrumb(props.timeRecord?.title);
+    updateTimeRecordPageBreadcrumb(props.timeRecord?.name);
   }
 
   selectedDate.value = route.query.date
@@ -52,16 +52,16 @@ watch(
   () => {
     pushQuery();
     init();
-  }
+  },
 );
 
 watch(
-  () => props.timeRecord?.title,
+  () => props.timeRecord?.name,
   () => {
     if (props.timeRecordId) {
-      updateTimeRecordPageBreadcrumb(props.timeRecord?.title);
+      updateTimeRecordPageBreadcrumb(props.timeRecord?.name);
     }
-  }
+  },
 );
 
 const hasFetch = computed(() => {
@@ -163,7 +163,7 @@ const tableColumns: ColumnDef<unknown>[] = [
     header: () => h("span", ["Tempo Total"]),
   },
   {
-    accessorKey: "title",
+    accessorKey: "name",
     header: () => h("span", ["Título"]),
 
     cell: ({ row }) =>
@@ -176,7 +176,7 @@ const tableColumns: ColumnDef<unknown>[] = [
           },
           class: "hover:text-primary hover:underline",
         },
-        () => [row.getValue("title")]
+        () => [row.getValue("name")],
       ),
   },
   {
@@ -203,7 +203,7 @@ const tableData = computed(() => {
       timeRecordsTable.push({
         ...trp,
         code: trp.timeRecord.code || "-",
-        title: trp.timeRecord.title || "Sem título",
+        title: trp.timeRecord.name || "Sem título",
         category: trp.timeRecord.categoryName || "-",
         day: trp.totalHours,
         total: trp.timeRecord.meta?.formattedTime,
@@ -246,7 +246,10 @@ const referenceDate = computed(() => {
           :max-date="maxDate"
           disableTimePicker
           utc
-          @update:modelValue="(e: string | Date | undefined) => e != undefined && (selectedDate = startOfDay(e))"
+          @update:modelValue="
+            (e: string | Date | undefined) =>
+              e != undefined && (selectedDate = startOfDay(e))
+          "
         />
       </div>
     </GTitlePage>

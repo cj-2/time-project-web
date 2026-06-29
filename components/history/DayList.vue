@@ -43,6 +43,7 @@ import {
   Colors,
   Filler,
 } from "chart.js";
+import { _$t } from "~/utils/i18n";
 
 ChartJS.register(
   Title,
@@ -53,7 +54,7 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   Filler,
-  Colors
+  Colors,
 );
 
 const props = defineProps<{
@@ -103,7 +104,7 @@ const chartOptions = computed(() => {
       },
       y: {
         ticks: {
-          stepSize: 1,
+          stepSize: 100,
         },
         grid: {
           color: isDark.value ? "#262626" : "#e5e5e5",
@@ -128,7 +129,7 @@ const deleteTpAction = () => {
   return deleteTimePeriodAction(
     deleteTpModal.id,
     closeDeleteTpModal,
-    props.callback
+    props.callback,
   );
 };
 
@@ -136,7 +137,7 @@ const deleteTsAction = () => {
   return deleteTimerSessionAction(
     deleteTsModal.id,
     closeDeleteTsModal,
-    props.callback
+    props.callback,
   );
 };
 
@@ -144,7 +145,7 @@ const deleteTmAction = () => {
   return deleteTimeMinuteAction(
     deleteTmModal.id,
     closeDeleteTmModal,
-    props.callback
+    props.callback,
   );
 };
 
@@ -187,14 +188,14 @@ const isFetchNow = computed(() => {
 });
 
 watch(
-  () => props.timeRecord?.title,
+  () => props.timeRecord?.name,
   () => {
-    updateTimeRecordPageBreadcrumb(props.timeRecord?.title);
-  }
+    updateTimeRecordPageBreadcrumb(props.timeRecord?.name);
+  },
 );
 
 onMounted(async () => {
-  updateTimeRecordPageBreadcrumb(props.timeRecord?.title);
+  updateTimeRecordPageBreadcrumb(props.timeRecord?.name);
   await getData();
 });
 
@@ -292,7 +293,7 @@ defineExpose({
           </span>
         </p>
 
-        <template v-if="day.timerSessions.length">
+        <template v-if="day.sessions.length">
           <Separator class="my-2" />
 
           <p class="text-lg flex gap-1">
@@ -315,17 +316,17 @@ defineExpose({
           </p>
 
           <p class="text-sm">
-            {{ day.timerSessionsFormattedTime }}, {{ day.timerSessions.length }}
-            {{ day.timerSessions.length > 1 ? "sessões" : "sessão" }}
+            {{ day.sessionsFormattedTime }}, {{ day.sessions.length }}
+            {{ day.sessions.length > 1 ? "sessões" : "sessão" }}
           </p>
 
           <section
-            v-if="day.timerSessions.length"
+            v-if="day.sessions.length"
             class="flex flex-row gap-2 flex-wrap py-2"
           >
             <Popover
-              v-for="timerSession in day.timerSessions"
-              :key="timerSession.id"
+              v-for="timerSession in day.sessions"
+              :key="timerSession.sessionId"
             >
               <PopoverTrigger>
                 <Badge
@@ -345,8 +346,8 @@ defineExpose({
                   <Separator class="mb-1" />
 
                   <section
-                    v-for="tp in timerSession.timePeriods"
-                    :key="tp.id"
+                    v-for="tp in timerSession.periods"
+                    :key="tp.periodId"
                     class="flex justify-around items-center gap-2"
                   >
                     <Badge variant="outline">
@@ -363,7 +364,7 @@ defineExpose({
                         variant="ghost"
                         size="icon"
                         class="h-6 w-6"
-                        @click="openDeleteTpModal(tp.id)"
+                        @click="openDeleteTpModal(tp.periodId)"
                       >
                         <Trash2 />
                       </Button>
@@ -376,7 +377,7 @@ defineExpose({
                     <Button
                       variant="ghost"
                       size="sm"
-                      @click="openDeleteTsModal(timerSession.id)"
+                      @click="openDeleteTsModal(timerSession.sessionId)"
                     >
                       <Trash2 />
                       {{ _$t("delete") }}
@@ -388,7 +389,7 @@ defineExpose({
           </section>
         </template>
 
-        <template v-if="day.timePeriods.length">
+        <template v-if="day.periods.length">
           <Separator class="my-2" />
 
           <p class="text-lg flex gap-1">
@@ -411,14 +412,14 @@ defineExpose({
           </p>
 
           <p class="text-sm">
-            {{ day.timePeriodsFormattedTime }}, {{ day.timePeriods.length }}
-            {{ day.timePeriods.length > 1 ? "períodos" : "período" }}
+            {{ day.periodsFormattedTime }}, {{ day.periods.length }}
+            {{ day.periods.length > 1 ? "períodos" : "período" }}
           </p>
 
           <section class="flex flex-row gap-2 flex-wrap py-2">
             <Popover
-              v-for="(period, index) in day.timePeriods"
-              :key="period.id"
+              v-for="(period, index) in day.periods"
+              :key="period.periodId"
             >
               <PopoverTrigger>
                 <Badge variant="outline" class="border-yellow-500/80">
@@ -449,7 +450,7 @@ defineExpose({
                     <Button
                       variant="ghost"
                       size="sm"
-                      @click="openDeleteTpModal(period.id!)"
+                      @click="openDeleteTpModal(period.periodId!)"
                     >
                       <Trash2 />
                       {{ _$t("delete") }}
@@ -461,7 +462,7 @@ defineExpose({
           </section>
         </template>
 
-        <template v-if="day.timeMinutes.length">
+        <template v-if="day.minutes.length">
           <Separator class="my-2" />
 
           <p class="text-lg flex gap-1">
@@ -484,20 +485,20 @@ defineExpose({
           </p>
 
           <p class="text-sm">
-            {{ day.timeMinutesFormattedTime }}, {{ day.timeMinutes.length }}
-            {{ day.timeMinutes.length > 1 ? "registros" : "registro" }}
+            {{ day.minutesFormattedTime }}, {{ day.minutes.length }}
+            {{ day.minutes.length > 1 ? "registros" : "registro" }}
           </p>
 
           <section class="flex flex-row gap-2 flex-wrap py-2">
-            <DropdownMenu v-for="item in day.timeMinutes" :key="item.id">
+            <DropdownMenu v-for="item in day.minutes" :key="item.minuteId">
               <DropdownMenuTrigger>
                 <Badge variant="outline" class="border-yellow-500/80">
-                  {{ item.minutes ? item.minutes + "m" : "0m" }}
+                  {{ item.formattedTime }}
                 </Badge>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem @click="openDeleteTmModal(item.id)">
+                <DropdownMenuItem @click="openDeleteTmModal(item.minuteId)">
                   <Trash2 />
                   {{ _$t("delete") }}
                 </DropdownMenuItem>

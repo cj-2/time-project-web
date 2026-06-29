@@ -85,7 +85,7 @@ const handleWithBus = (event: CategoryTableBusEvent) => {
   }
 
   if (event.action == "delete") {
-    openConfirmDeleteModal({ id: category.id, name: category.name });
+    openConfirmDeleteModal({ id: category.categoryId, name: category.name });
   }
 };
 

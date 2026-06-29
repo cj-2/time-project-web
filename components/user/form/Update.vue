@@ -16,7 +16,7 @@ const formSchema = toTypedSchema(
   yup.object({
     name: v.name(),
     email: v.email(),
-  })
+  }),
 );
 
 const { handleSubmit, setValues } = useForm({
@@ -29,7 +29,7 @@ const submitAction = async (dto: UpdateUserDto) => {
   isFetch.value = true;
 
   try {
-    await userApi().update(mySelf.value!.id, dto);
+    await userApi().update(mySelf.value!.userId, dto);
 
     // if (oldEmail.value != dto.email) {
     //   OkToast(_$t("updateUserSuccessAndLogin"));

@@ -25,7 +25,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 
 const loading = ref(true);
@@ -37,8 +37,8 @@ const chartData = computed(() => {
   const days = statistics.value.days.map((day) =>
     format(new Date(day.startDay), "EEE (dd/MM)", { locale: ptBR }).replace(
       /^./,
-      (c) => c.toUpperCase()
-    )
+      (c) => c.toUpperCase(),
+    ),
   );
 
   const hours = statistics.value.days.map((day) => day.totalInHours);
@@ -116,7 +116,7 @@ onMounted(async () => {
     const today = startOfDay(new Date());
     statistics.value = await getWeekStatistic(
       addDays(today, -6).toUTCString(),
-      today.toUTCString()
+      today.toUTCString(),
     );
   } catch (error) {
     console.error("Erro ao carregar estatísticas semanais:", error);
@@ -130,12 +130,12 @@ const formatWeekPeriod = (): string => {
 
   const start = new Date(statistics.value.total.startDay).toLocaleDateString(
     "pt-BR",
-    { day: "2-digit", month: "short" }
+    { day: "2-digit", month: "short" },
   );
 
   const end = new Date(statistics.value.total.endDay).toLocaleDateString(
     "pt-BR",
-    { day: "2-digit", month: "short" }
+    { day: "2-digit", month: "short" },
   );
 
   return `${start} - ${end}`;
@@ -157,7 +157,7 @@ const tableColumns: ColumnDef<unknown>[] = [
     header: () => h("span", ["Tempo Total"]),
   },
   {
-    accessorKey: "title",
+    accessorKey: "name",
     header: () => h("span", ["Título"]),
 
     cell: ({ row }) =>
@@ -170,7 +170,7 @@ const tableColumns: ColumnDef<unknown>[] = [
           },
           class: "hover:text-primary hover:underline",
         },
-        () => [row.getValue("title")]
+        () => [row.getValue("name")],
       ),
   },
   {
@@ -197,7 +197,7 @@ const tableData = computed(() => {
       timeRecordsTable.push({
         ...trp,
         code: trp.timeRecord.code || "-",
-        title: trp.timeRecord.title || "Sem título",
+        title: trp.timeRecord.name || "Sem título",
         category: trp.timeRecord.categoryName || "-",
         week: trp.totalHours,
         total: trp.timeRecord.meta?.formattedTime,

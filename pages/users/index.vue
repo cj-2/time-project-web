@@ -14,7 +14,7 @@ const modal = reactive({
 
 const handleDelete = async (user: UserMap) => {
   try {
-    await userStore.delete(user.id);
+    await userStore.delete(user.userId);
   } catch (error) {
     ErrorToast(error);
   }

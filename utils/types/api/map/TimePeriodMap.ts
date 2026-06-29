@@ -1,6 +1,6 @@
 export type TimePeriodMap = {
-  id: number;
-  timeRecordId: number;
+  periodId: number;
+  recordId: number;
   start: string;
   end: string;
   time: {

@@ -1,4 +1,4 @@
 export type CategoryMap = {
-  id: number;
+  categoryId: number;
   name: string;
 };

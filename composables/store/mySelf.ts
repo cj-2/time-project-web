@@ -12,7 +12,7 @@ export const useMySelfStore = defineStore("MySelfStore", () => {
         callback(data);
       }
     } catch (error) {
-      ErrorToast(error);
+      // ErrorToast(error);
     } finally {
       isFetch.value = false;
     }

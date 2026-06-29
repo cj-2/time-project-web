@@ -17,7 +17,7 @@ export const useAllCategoriesStore = defineStore(
     };
 
     const findCategoryById = (id: number) => {
-      return data.value.find((c) => c.id == id);
+      return data.value.find((c) => c.categoryId == id);
     };
 
     return {
@@ -29,5 +29,5 @@ export const useAllCategoriesStore = defineStore(
   },
   {
     persist: true,
-  }
+  },
 );

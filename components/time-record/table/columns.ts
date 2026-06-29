@@ -12,24 +12,24 @@ import {
 } from "lucide-vue-next";
 
 export const columns: ColumnDef<TimeRecordTable>[] = [
+  // {
+  //   accessorKey: "lastTimeDate",
+  //   header: ({ column }) =>
+  //     h(
+  //       Button,
+  //       {
+  //         variant: "ghost",
+  //         onClick: () => column.toggleSorting(),
+  //       },
+  //       () => [
+  //         column.getIsSorted() === "asc" && h(CalendarArrowUpIcon),
+  //         column.getIsSorted() === "desc" && h(CalendarArrowDownIcon),
+  //         h("span", ["Iteração"]),
+  //       ],
+  //     ),
+  // },
   {
-    accessorKey: "lastTimeDate",
-    header: ({ column }) =>
-      h(
-        Button,
-        {
-          variant: "ghost",
-          onClick: () => column.toggleSorting(),
-        },
-        () => [
-          column.getIsSorted() === "asc" && h(CalendarArrowUpIcon),
-          column.getIsSorted() === "desc" && h(CalendarArrowDownIcon),
-          h("span", ["Iteração"]),
-        ]
-      ),
-  },
-  {
-    accessorKey: "title",
+    accessorKey: "name",
     header: ({ column }) =>
       h(
         Button,
@@ -41,7 +41,7 @@ export const columns: ColumnDef<TimeRecordTable>[] = [
           column.getIsSorted() === "asc" && h(AArrowUpIcon),
           column.getIsSorted() === "desc" && h(AArrowDownIcon),
           h("span", ["Título"]),
-        ]
+        ],
       ),
     cell: ({ row }) =>
       h(
@@ -53,7 +53,7 @@ export const columns: ColumnDef<TimeRecordTable>[] = [
           },
           class: "hover:text-primary hover:underline",
         },
-        () => [row.getValue("title")]
+        () => [row.getValue("name")],
       ),
   },
   {
@@ -69,7 +69,7 @@ export const columns: ColumnDef<TimeRecordTable>[] = [
           column.getIsSorted() === "asc" && h(AArrowUpIcon),
           column.getIsSorted() === "desc" && h(AArrowDownIcon),
           h("span", ["Código"]),
-        ]
+        ],
       ),
     cell: ({ cell }) => {
       const value = cell.getValue() as string;
@@ -95,7 +95,7 @@ export const columns: ColumnDef<TimeRecordTable>[] = [
           column.getIsSorted() === "asc" && h(ClockArrowUpIcon),
           column.getIsSorted() === "desc" && h(ClockArrowDownIcon),
           h("span", ["Tempo"]),
-        ]
+        ],
       ),
   },
   {

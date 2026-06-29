@@ -74,7 +74,7 @@ const sort = ref<ColumnSort>({
 
 const configTableDataAndFetch = () => {
   const hasFilter = paginationQuery.value.filters.find(
-    (e) => e.tag === "category"
+    (e) => e.tag === "category",
   );
 
   if (hasFilter) {
@@ -148,7 +148,7 @@ onMounted(() => {
                 <SelectGroup>
                   <SelectItem
                     v-for="item in categories"
-                    :value="item.id.toString()"
+                    :value="item.categoryId.toString()"
                   >
                     {{ item.name }}
                   </SelectItem>

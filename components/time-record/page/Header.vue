@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { _$t } from "~/utils/i18n";
+
 defineProps<{
   timeRecord?: TimeRecordMap;
   isFetch: boolean;
@@ -22,7 +24,7 @@ defineProps<{
       class="flex md:flex-row gap-5 flex-col md:items-center items-start mb-5"
     >
       <h2 class="text-4xl font-bold">
-        {{ timeRecord.title || _$t("noTitle") }}
+        {{ timeRecord.name || _$t("noTitle") }}
       </h2>
 
       <slot name="button"></slot>

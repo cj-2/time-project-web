@@ -13,7 +13,7 @@ const formSchema = toTypedSchema(
     oldPassword: v.oldPassword(),
     password: v.password(),
     confirmPassword: v.confirmPassword(),
-  })
+  }),
 );
 
 const { handleSubmit, resetForm } = useForm({
@@ -26,7 +26,7 @@ const submitAction = async (dto: UpdateUserPasswordDto) => {
   isFetch.value = true;
 
   try {
-    await userApi().updatePassword(mySelf.value!.id, dto);
+    await userApi().updatePassword(mySelf.value!.userId, dto);
     resetForm();
   } catch (error) {
     ErrorToast(error);

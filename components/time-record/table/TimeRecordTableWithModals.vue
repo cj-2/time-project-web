@@ -3,6 +3,7 @@ import { toTypedSchema } from "@vee-validate/yup";
 import { useEventBus } from "@vueuse/core";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
+import { _$t } from "~/utils/i18n";
 
 const modal = reactive({
   createOrUpdateTimeRecord: false,
@@ -23,7 +24,7 @@ const formConfirmSchema = toTypedSchema(
   yup.object({
     originalCode: yup.string(),
     code: yup.string().oneOf([yup.ref("originalCode")], _$t("codeIsWrong")),
-  })
+  }),
 );
 
 const {
@@ -43,8 +44,8 @@ const closeConfirmDeleteModal = () => {
 const openConfirmDeleteModal = async (event: TimeRecordTableBusEvent) => {
   const tr = event.data;
 
-  modal.confirmDelete.id = tr.id;
-  modal.confirmDelete.title = tr.title;
+  modal.confirmDelete.id = tr.recordId;
+  modal.confirmDelete.title = tr.name;
   modal.confirmDelete.open = true;
 
   setValues({

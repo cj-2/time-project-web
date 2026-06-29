@@ -7,6 +7,7 @@ import { useDebounceFn } from "@vueuse/core";
 import { useForm } from "vee-validate";
 import { X, Check, Search, ChevronsUpDown, PenLine } from "lucide-vue-next";
 import { v4 as uuidv4 } from "uuid";
+import { _$t } from "~/utils/i18n";
 
 const emit = defineEmits(["close", "refresh"]);
 
@@ -16,7 +17,7 @@ const props = withDefaults(
     hideTimePeriods?: boolean;
     refreshTimeRecords?: boolean;
   }>(),
-  {}
+  {},
 );
 
 const router = useRouter();
@@ -46,7 +47,7 @@ const formSchema = toTypedSchema(
         id: yup.string().required(),
         start: yup.date().required(),
         end: yup.date().required(),
-      })
+      }),
     ),
     description: yup.string(),
     externalLink: yup.string().url(),
@@ -60,7 +61,7 @@ const formSchema = toTypedSchema(
     category: yup.string(),
     timerSessionType: yup.string(),
     timerSessionFrom: yup.string(),
-  })
+  }),
 );
 
 const {
@@ -85,7 +86,7 @@ watch(
     setValues({
       code: newValue?.replace(" ", "") || "",
     });
-  }
+  },
 );
 
 /**
@@ -133,15 +134,15 @@ const handleCategory = async () => {
     formValues.category === newCategories.value[0])
   ) {
     const category = await categoryApi().post({ name: newCategories.value[0] });
-    return category!.id;
+    return category!.categoryId;
   }
 
   if (formValues.category) {
     const category = allCategories.value.find(
-      (category) => category.name === formValues.category
+      (category) => category.name === formValues.category,
     );
 
-    if (category) return category.id;
+    if (category) return category.categoryId;
   }
 
   return null;
@@ -177,7 +178,7 @@ const addTimePeriodToForm = () => {
       ? new Date()
       : addMinutes(
           formValues.timePeriods![formValues.timePeriods!.length - 1].end,
-          15
+          15,
         );
 
   const end = addMinutes(start, 25);
@@ -274,15 +275,15 @@ const onSubmit = handleSubmit((value) => {
 
 const isEditMode = computed(() => {
   return Boolean(
-    props.editObject && (props.editObject.id || props.editObject.isBind)
+    props.editObject && (props.editObject.id || props.editObject.isBind),
   );
 });
 
 const isSyncMode = computed(() => {
   return Boolean(
     props.editObject &&
-      (props.editObject.id || props.editObject.isBind) &&
-      props.editObject.isSync
+    (props.editObject.id || props.editObject.isBind) &&
+    props.editObject.isSync,
   );
 });
 
@@ -555,9 +556,9 @@ onMounted(async () => {
     </section>
 
     <template v-if="!isSyncMode">
-      <FormField v-slot="{ componentField }" name="title">
+      <FormField v-slot="{ componentField }" name="name">
         <FormItem>
-          <FormLabel>{{ _$t("title") }}</FormLabel>
+          <FormLabel>{{ _$t("name") }}</FormLabel>
           <FormControl>
             <Input
               v-bind="componentField"
@@ -583,14 +584,14 @@ onMounted(async () => {
               v-bind="componentField"
               type="text"
               v-maska="{
-										mask: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-										tokens: {
-											X: {
-												pattern: /[a-zA-Z0-9-]/,
-												transform: (v: string) => v.toLowerCase(),
-											},
-										},
-									}"
+                mask: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                tokens: {
+                  X: {
+                    pattern: /[a-zA-Z0-9-]/,
+                    transform: (v: string) => v.toLowerCase(),
+                  },
+                },
+              }"
               :disabled="disableInputs"
             />
           </FormControl>

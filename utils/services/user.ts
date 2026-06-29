@@ -18,8 +18,8 @@ export const userApi = () => ({
       body,
     });
   },
-  getMySelf: async () => {
-    return useCustomFetch()<UserMap>("users/myself", { method: "GET" });
+  getMySelf: () => {
+    return $fetch("/api/users/myself");
   },
   requestRecoveryPasswordCode: async (body: RecoveryDto) => {
     return useCustomFetch(false, false)<boolean>("/users/recovery", {
@@ -46,7 +46,7 @@ export const userApi = () => ({
   get: async (pagQuery: IPaginationQuery) => {
     return useCustomFetch()<Pagination<UserMap>>(
       `/users${paginationQueryHandle(pagQuery)}`,
-      { method: "GET" }
+      { method: "GET" },
     );
   },
   delete: async (id: number) => {

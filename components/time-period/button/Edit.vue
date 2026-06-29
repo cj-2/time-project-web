@@ -20,10 +20,10 @@ const editData = reactive<TimePeriodForm>({
 const clickAction = async () => {
   const tp = props.timePeriod;
 
-  editData.id = tp.id;
+  editData.id = tp.periodId;
   editData.start = tp.start;
   editData.end = tp.end;
-  editData.timeRecordId = tp.timeRecordId;
+  editData.timeRecordId = tp.recordId;
   editData.callback = () => {};
 
   emit("open", editData);

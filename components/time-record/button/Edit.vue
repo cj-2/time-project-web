@@ -20,8 +20,8 @@ const openTimeRecordModal = () => {
   if (!tr) return;
 
   editTimeRecordObject.value = {
-    id: tr.id,
-    title: tr.title,
+    id: tr.recordId,
+    title: tr.name,
     description: tr.description,
     category: tr.categoryName || "",
     code: tr.code || "",

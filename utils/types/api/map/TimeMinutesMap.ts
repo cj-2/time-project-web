@@ -1,5 +1,6 @@
 export type TimeMinutesMap = {
-  id: number;
-  minutes: number;
+  minuteId: number;
   date: string;
+  total: number;
+  formattedTime: string;
 };

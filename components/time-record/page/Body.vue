@@ -2,6 +2,7 @@
 import { History, Flame } from "lucide-vue-next";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { getTimeRecordQuery } from "./body/actions";
+import { _$t } from "~/utils/i18n";
 
 const router = useRouter();
 const route = useRoute();
@@ -13,13 +14,13 @@ const timeRecord = computed(() => {
 });
 
 const title = computed(() => {
-  return timeRecord.value?.title || "";
+  return timeRecord.value?.name || "";
 });
 
 useHead({ title });
 
 const actualTimeRecordId = computed(() => {
-  return state.value.data?.id;
+  return state.value.data?.recordId;
 });
 
 const refreshTimeRecord = async (code = "") => {
@@ -104,7 +105,7 @@ const refreshTimePeriodCallback = async () => {
               v-if="actualTimeRecordId && timeRecord"
               :id="actualTimeRecordId"
               :code="timeRecord.code"
-              :title="timeRecord.title"
+              :title="timeRecord.name"
               :post-time-period-callback="refreshTimePeriodCallback"
             />
 
