@@ -2,7 +2,7 @@
 import { Edit } from "lucide-vue-next";
 
 const props = defineProps<{
-  timePeriod: PeriodMap;
+  period: PeriodMap;
 }>();
 
 const emit = defineEmits<{
@@ -18,7 +18,7 @@ const editData = reactive<PeriodForm>({
 });
 
 const clickAction = async () => {
-  const tp = props.timePeriod;
+  const tp = props.period;
 
   editData.id = tp.periodId;
   editData.start = tp.start;

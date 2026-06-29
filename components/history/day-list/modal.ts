@@ -14,10 +14,10 @@ export const createPeriod = (timeRecordId: number) => {
   tpModal.form = undefined;
 };
 
-export const editPeriod = (timePeriod: PeriodForm) => {
+export const editPeriod = (period: PeriodForm) => {
   tpModal.open = true;
   tpModal.timeRecordId = undefined;
-  tpModal.form = timePeriod;
+  tpModal.form = period;
 };
 
 export const closePeriodModal = async (

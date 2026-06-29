@@ -2,7 +2,7 @@ export const getIsFetch = ref(false);
 export const deleteTpIsFetch = ref(false);
 
 export const deletePeriodAction = async (
-  timePeriodId: number,
+  periodId: number,
   closeModalMethod: () => void = () => {},
   callback: (() => Promise<void>) | undefined = undefined,
 ) => {
@@ -11,7 +11,7 @@ export const deletePeriodAction = async (
   const { refetchData } = useTimeRecordHistoryStore();
 
   try {
-    await deletePeriod(timePeriodId);
+    await deletePeriod(periodId);
 
     OkToast(useNuxtApp().$i18n.t("deletePeriodSuccess"));
 

@@ -1,6 +1,6 @@
 import { format, getDayOfYear, intervalToDuration } from "date-fns";
 
-export const timePeriodLabel = (count?: number) => {
+export const periodLabel = (count?: number) => {
   const countText = count === 1 ? " período" : " períodos";
   return !count ? "Nenhum" : count + countText;
 };
@@ -25,29 +25,29 @@ export const timeRecordLocalToForm = (
 };
 
 export const formatPeriodPopper = (
-  timePeriod: PeriodMap | PeriodLocal,
+  period: PeriodMap | PeriodLocal,
 ): { formatted: string; date: string } => {
   const fullFormat = "dd/MM/yyyy HH:mm::ss";
   const onlyTime = "HH:mm:ss";
   const onlyDate = "dd/MM/yyyy";
 
   const milliseconds =
-    new Date(timePeriod.end).getTime() - new Date(timePeriod.start).getTime();
+    new Date(period.end).getTime() - new Date(period.start).getTime();
 
-  if (getDayOfYear(timePeriod.start) === getDayOfYear(timePeriod.end)) {
+  if (getDayOfYear(period.start) === getDayOfYear(period.end)) {
     return {
       formatted: millisecondsToString(milliseconds),
-      date: `${format(timePeriod.start, onlyTime)} até ${format(
-        timePeriod.end,
+      date: `${format(period.start, onlyTime)} até ${format(
+        period.end,
         onlyTime,
-      )} de ${format(timePeriod.start, onlyDate)}`,
+      )} de ${format(period.start, onlyDate)}`,
     };
   }
 
   return {
     formatted: millisecondsToString(milliseconds),
-    date: `${format(timePeriod.start, fullFormat)} até ${format(
-      timePeriod.end,
+    date: `${format(period.start, fullFormat)} até ${format(
+      period.end,
       fullFormat,
     )}`,
   };

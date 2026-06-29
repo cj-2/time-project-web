@@ -14,7 +14,7 @@ export type RangeStatistic = {
   pomodoroCount: number;
   breakCount: number;
   sessionCount: number;
-  timePeriodCount: number;
+  periodCount: number;
   isolatedPeriodCount: number;
   manualCount: number;
 

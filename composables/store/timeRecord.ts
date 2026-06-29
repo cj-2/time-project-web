@@ -72,7 +72,7 @@ export const useTimeRecordStore = defineStore(
             name: timeRecord.name || "Sem título",
             categoryName: timeRecord.categoryName || "-",
             formattedTime: timeRecord.meta?.formattedTime || "Nenhum",
-            timeCountText: timePeriodLabel(timeRecord.meta?.timeCount!),
+            timeCountText: periodLabel(timeRecord.meta?.timeCount!),
           });
         });
 

@@ -19,11 +19,11 @@ defineProps<{
       <HoverCardContent align="center">
         <div class="flex gap-2">
           <Badge
-            v-for="timePeriod in periods"
-            :title="formatPeriodPopper(timePeriod).date"
+            v-for="period in periods"
+            :title="formatPeriodPopper(period).date"
             variant="outline"
           >
-            {{ formatPeriodPopper(timePeriod).formatted }}
+            {{ formatPeriodPopper(period).formatted }}
           </Badge>
         </div>
       </HoverCardContent>

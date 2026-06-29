@@ -8,6 +8,7 @@ import { useForm } from "vee-validate";
 import { X, Check, Search, ChevronsUpDown, PenLine } from "lucide-vue-next";
 import { v4 as uuidv4 } from "uuid";
 import { _$t } from "~/utils/i18n";
+import { cn } from "~/lib/utils";
 
 const emit = defineEmits(["close", "refresh"]);
 

@@ -15,7 +15,7 @@ export const columns: ColumnDef<TimeRecordLocalTable>[] = [
         "div",
         { class: "text-right" },
         h(Col, {
-          label: timePeriodLabel(row.original.periods.length),
+          label: periodLabel(row.original.periods.length),
           periods: row.original.periods,
         }),
       ),
