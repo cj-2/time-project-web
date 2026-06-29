@@ -1,9 +1,9 @@
 export const getPeriod = async (
-  timeRecordId: number,
+  recordId: number,
   pagQuery: IPaginationQuery,
 ) => {
   return useCustomFetch()<Pagination<PeriodMap>>(
-    `/periods/${timeRecordId}?page=${pagQuery.page}&perPage=${pagQuery.perPage}`,
+    `/periods/${recordId}?page=${pagQuery.page}&perPage=${pagQuery.perPage}`,
     { method: "GET" },
   );
 };
@@ -15,11 +15,8 @@ export const postPeriod = async (body: PeriodDto) => {
   });
 };
 
-export const postPeriodList = async (
-  timeRecordId: number,
-  body: PeriodListDto,
-) => {
-  return useCustomFetch(false)<PeriodDto[]>(`/periods/list/${timeRecordId}`, {
+export const postPeriodList = async (recordId: number, body: PeriodListDto) => {
+  return useCustomFetch(false)<PeriodDto[]>(`/periods/list/${recordId}`, {
     method: "POST",
     body,
   });

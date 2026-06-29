@@ -58,15 +58,15 @@ ChartJS.register(
 );
 
 const props = defineProps<{
-  timeRecordId: number;
-  timeRecord?: TimeRecordMap;
+  recordId: number;
+  record?: RecordMap;
   isFetch?: boolean;
   updatedOn?: Date;
   clearUpdatedOn?: () => void;
   callback?: () => Promise<void>;
 }>();
 
-const dayStore = useTimeRecordHistoryStore();
+const dayStore = useRecordHistoryStore();
 const {
   apiRes,
   chartData,
@@ -162,7 +162,7 @@ const closeTimeMinuteCallback = async (refresh = false) => {
 };
 
 const getData = () => {
-  dayStore.setTimeRecordId(props.timeRecordId);
+  dayStore.setRecordId(props.recordId);
 
   if (props.updatedOn && props.clearUpdatedOn) {
     props.clearUpdatedOn();
@@ -188,14 +188,14 @@ const isFetchNow = computed(() => {
 });
 
 watch(
-  () => props.timeRecord?.name,
+  () => props.record?.name,
   () => {
-    updateTimeRecordPageBreadcrumb(props.timeRecord?.name);
+    updateRecordPageBreadcrumb(props.record?.name);
   },
 );
 
 onMounted(async () => {
-  updateTimeRecordPageBreadcrumb(props.timeRecord?.name);
+  updateRecordPageBreadcrumb(props.record?.name);
   await getData();
 });
 
@@ -222,15 +222,15 @@ defineExpose({
           <span>Listagem por data de criação de sessões e períodos.</span>
         </section>
 
-        <div v-if="timeRecordId" class="flex gap-5 flex-row items-start mt-1">
+        <div v-if="recordId" class="flex gap-5 flex-row items-start mt-1">
           <TimeMinuteButtonAdd
-            :time-record-id="timeRecordId"
+            :time-record-id="recordId"
             :disabled="isFetchNow"
             @open="createTimeMinute"
           />
 
           <PeriodButtonAdd
-            :time-record-id="timeRecordId"
+            :time-record-id="recordId"
             :disabled="isFetchNow"
             @open="createPeriod"
           />
@@ -548,7 +548,7 @@ defineExpose({
       </DialogHeader>
 
       <PeriodFormCreateAndUpdate
-        :time-record-id="tpModal.timeRecordId"
+        :time-record-id="tpModal.recordId"
         :edit-object="tpModal.form"
         @close="closePeriodCallback"
       />
@@ -567,7 +567,7 @@ defineExpose({
       </DialogHeader>
 
       <TimeMinuteFormCreateAndUpdate
-        :time-record-id="tmModal.timeRecordId"
+        :time-record-id="tmModal.recordId"
         :callback
         @close="closeTimeMinuteCallback"
       />

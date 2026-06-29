@@ -18,8 +18,8 @@ const props = withDefaults(
 
 const timer = computed(() => timerStore.getTimer(props.id));
 
-const timeRecords = computed<TimeRecordLocalTable[]>(() =>
-  timerStore.getTimeRecords(props.id),
+const records = computed<RecordLocalTable[]>(() =>
+  timerStore.getRecords(props.id),
 );
 
 const totalPages = computed(() =>
@@ -40,7 +40,7 @@ const confirmDelete = <
   id: null,
 });
 
-const editTimeRecordObject = ref<TimeRecordForm | undefined>(undefined);
+const editRecordObject = ref<RecordForm | undefined>(undefined);
 
 watch(
   () => timer.value.localRecords.length,
@@ -62,22 +62,18 @@ const openConfirmDeleteModal = (uuid: string, id: number | null) => {
 };
 
 const deleteAction = () => {
-  timerStore.deleteTimeRecordLocal(confirmDelete.uuid, props.id);
+  timerStore.deleteRecordLocal(confirmDelete.uuid, props.id);
   closeConfirmDeleteModal();
 };
 
-const openModal = (
-  timeRecord: TimeRecordLocal,
-  isSync = false,
-  isBind = false,
-) => {
-  if (!timeRecord) return;
+const openModal = (record: RecordLocal, isSync = false, isBind = false) => {
+  if (!record) return;
 
-  editTimeRecordObject.value = timeRecordLocalToForm(
-    { ...timeRecord, isSync, isBind },
+  editRecordObject.value = recordLocalToForm(
+    { ...record, isSync, isBind },
     () => {
-      timerStore.deleteTimeRecordLocal(timeRecord.localUuid, props.id);
-      props.postPeriodCallback(timeRecord.code || "");
+      timerStore.deleteRecordLocal(record.localUuid, props.id);
+      props.postPeriodCallback(record.code || "");
     },
   );
 
@@ -89,14 +85,14 @@ const closeModal = () => {
 
   setTimeout(() => {
     if (modal.open == false) {
-      editTimeRecordObject.value = undefined;
+      editRecordObject.value = undefined;
     }
   }, 500);
 };
 
-const bus = useEventBus<TimeRecordLocalTableBusEvent>(TRL_TABLE_BUS_NAME);
+const bus = useEventBus<RecordLocalTableBusEvent>(TRL_TABLE_BUS_NAME);
 
-const handleWithBus = (event: TimeRecordLocalTableBusEvent) => {
+const handleWithBus = (event: RecordLocalTableBusEvent) => {
   if (event.action == "delete") {
     openConfirmDeleteModal(event.data.localUuid, event.data.id);
   } else if (event.action == "sync") {
@@ -116,7 +112,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <GDataTable :columns="columns" :data="timeRecords" />
+  <GDataTable :columns="columns" :data="records" />
 
   <GPaginationV2
     :page="timer.page"
@@ -137,12 +133,12 @@ onBeforeUnmount(() => {
         <DialogTitle> {{ _$t("task") }} </DialogTitle>
 
         <DialogDescription>
-          {{ editTimeRecordObject?.code }}
+          {{ editRecordObject?.code }}
         </DialogDescription>
       </DialogHeader>
 
-      <TimeRecordFormCreateAndUpdate
-        :edit-object="editTimeRecordObject"
+      <RecordFormCreateAndUpdate
+        :edit-object="editRecordObject"
         @close="closeModal"
       />
     </DialogContent>

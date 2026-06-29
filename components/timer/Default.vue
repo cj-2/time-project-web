@@ -92,7 +92,7 @@ if (props.postPeriodCallback) {
 }
 
 const modal = reactive({
-  createTimeRecord: {
+  createRecord: {
     open: false,
   },
   confirmPersistMethod: {
@@ -101,14 +101,14 @@ const modal = reactive({
   confirmStopTimer: {
     open: false,
   },
-  timeRecordsTable: {
+  recordsTable: {
     open: false,
   },
 });
 
 const noSleepObject = ref(new NoSleep());
 
-const editTimeRecordObject = ref<TimeRecordForm>();
+const editRecordObject = ref<RecordForm>();
 
 const startTimer = () => {
   if (!openFull.value) openFull.value = true;
@@ -179,7 +179,7 @@ const endTimer = async () => {
 
   if (!props.id) {
     focusOnWindow();
-    editTimeRecordObject.value = timeRecordLocalToForm(
+    editRecordObject.value = recordLocalToForm(
       {
         periods,
         timerSessionType: timer.value.type,
@@ -223,19 +223,19 @@ const endTimer = async () => {
 };
 
 const persistOnServer = () => {
-  editTimeRecordObject.value!.isBind = false;
-  editTimeRecordObject.value!.isSync = false;
+  editRecordObject.value!.isBind = false;
+  editRecordObject.value!.isSync = false;
 
   modal.confirmPersistMethod.open = false;
-  modal.createTimeRecord.open = true;
+  modal.createRecord.open = true;
 };
 
 const bindWithRecord = () => {
-  editTimeRecordObject.value!.isBind = true;
-  editTimeRecordObject.value!.isSync = true;
+  editRecordObject.value!.isBind = true;
+  editRecordObject.value!.isSync = true;
 
   modal.confirmPersistMethod.open = false;
-  modal.createTimeRecord.open = true;
+  modal.createRecord.open = true;
 };
 
 const saveOnBrowser = () => {
@@ -243,13 +243,13 @@ const saveOnBrowser = () => {
   modal.confirmPersistMethod.open = false;
 };
 
-const closeTimeRecordModal = (reopenPersistModal = false) => {
-  modal.createTimeRecord.open = false;
+const closeRecordModal = (reopenPersistModal = false) => {
+  modal.createRecord.open = false;
 
   if (reopenPersistModal) {
     modal.confirmPersistMethod.open = true;
   } else {
-    editTimeRecordObject.value = undefined;
+    editRecordObject.value = undefined;
   }
 };
 
@@ -646,7 +646,7 @@ onBeforeUnmount(() => {
       variant="link"
       :disabled="timer.isRun"
       class="text-foreground"
-      @click="modal.timeRecordsTable.open = !modal.timeRecordsTable.open"
+      @click="modal.recordsTable.open = !modal.recordsTable.open"
     >
       <template v-if="!props.id">
         Há {{ timer.localRecords.length }}
@@ -686,8 +686,8 @@ onBeforeUnmount(() => {
   </Dialog>
 
   <Dialog
-    v-bind:open="modal.timeRecordsTable.open"
-    @update:open="!$event && (modal.timeRecordsTable.open = false)"
+    v-bind:open="modal.recordsTable.open"
+    @update:open="!$event && (modal.recordsTable.open = false)"
   >
     <DialogContent @interact-outside="$event.preventDefault()">
       <DialogHeader>
@@ -698,7 +698,7 @@ onBeforeUnmount(() => {
         </DialogDescription>
       </DialogHeader>
 
-      <TimeRecordTableLocal
+      <RecordTableLocal
         v-if="timer.localRecords.length"
         :id="props.id"
         :postPeriodCallback="(code: string) => postPeriodCallback(code)"
@@ -766,15 +766,15 @@ onBeforeUnmount(() => {
     />
 
     <Dialog
-      v-bind:open="modal.createTimeRecord.open"
-      @update:open="!$event && closeTimeRecordModal(true)"
+      v-bind:open="modal.createRecord.open"
+      @update:open="!$event && closeRecordModal(true)"
     >
       <DialogContent @interact-outside="$event.preventDefault()">
         <DialogHeader>
           <DialogTitle>
             <span class="mr-2"> {{ _ct("task") }} </span>
-            <Badge v-if="editTimeRecordObject?.code" variant="outline">
-              {{ editTimeRecordObject?.code }}
+            <Badge v-if="editRecordObject?.code" variant="outline">
+              {{ editRecordObject?.code }}
             </Badge>
           </DialogTitle>
 
@@ -783,9 +783,9 @@ onBeforeUnmount(() => {
           </DialogDescription>
         </DialogHeader>
 
-        <TimeRecordFormCreateAndUpdate
-          :edit-object="editTimeRecordObject"
-          @close="closeTimeRecordModal"
+        <RecordFormCreateAndUpdate
+          :edit-object="editRecordObject"
+          @close="closeRecordModal"
         />
       </DialogContent>
     </Dialog>

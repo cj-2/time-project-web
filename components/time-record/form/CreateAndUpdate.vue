@@ -14,15 +14,15 @@ const emit = defineEmits(["close", "refresh"]);
 
 const props = withDefaults(
   defineProps<{
-    editObject?: TimeRecordForm;
+    editObject?: RecordForm;
     hidePeriods?: boolean;
-    refreshTimeRecords?: boolean;
+    refreshRecords?: boolean;
   }>(),
   {},
 );
 
 const router = useRouter();
-const trStore = useTimeRecordStore();
+const trStore = useRecordStore();
 
 const allCategoriesStore = useAllCategoriesStore();
 const { fetchData } = allCategoriesStore;
@@ -199,14 +199,14 @@ const deletePeriodFromForm = (index: number) => {
  * start: Time Record
  */
 
-const searchTrList = ref<SearchTimeRecordItem[]>([]);
-const selectedTr = ref<SearchTimeRecordItem>();
+const searchTrList = ref<SearchRecordItem[]>([]);
+const selectedTr = ref<SearchRecordItem>();
 const isTrSearch = ref<boolean>(false);
 
 const searchTr = async (q: string = "") => {
   try {
     isTrSearch.value = true;
-    const result = await searchTimeRecord(q);
+    const result = await searchRecord(q);
 
     if (result) {
       searchTrList.value = result.map((item) => {
@@ -247,7 +247,7 @@ const submitIsDisabled = computed(() => {
 });
 
 const onSubmit = handleSubmit((value) => {
-  const dto: TimeRecordSharedDto = {
+  const dto: RecordSharedDto = {
     title: value.title || "",
     description: value.description || "",
     code: value.code,
@@ -290,18 +290,18 @@ const isSyncMode = computed(() => {
  * start: Http
  */
 
-const createAction = async (dto: CreateTimeRecordDto) => {
+const createAction = async (dto: CreateRecordDto) => {
   try {
     isFetching.value = true;
-    const result = await postTimeRecord({
+    const result = await postRecord({
       ...dto,
       categoryId: await handleCategory(),
     });
 
     if (formOptions.callback) formOptions.callback(result?.code);
 
-    closeModal(props.refreshTimeRecords);
-    OkToast(_$t("createTimeRecordSuccess"));
+    closeModal(props.refreshRecords);
+    OkToast(_$t("createRecordSuccess"));
 
     router.push({ name: "record", params: { code: result?.code } });
   } catch (error) {
@@ -311,7 +311,7 @@ const createAction = async (dto: CreateTimeRecordDto) => {
   }
 };
 
-const updateAction = async (dto: UpdateTimeRecordDto) => {
+const updateAction = async (dto: UpdateRecordDto) => {
   try {
     isFetching.value = true;
 
@@ -328,7 +328,7 @@ const updateAction = async (dto: UpdateTimeRecordDto) => {
 
       if (formOptions.callback) formOptions.callback();
     } else {
-      const result = await putTimeRecord({
+      const result = await putRecord({
         ...dto,
         id: formValues.id!,
         categoryId: await handleCategory(),
@@ -337,9 +337,9 @@ const updateAction = async (dto: UpdateTimeRecordDto) => {
       if (formOptions.callback) formOptions.callback(result?.code);
     }
 
-    closeModal(props.refreshTimeRecords);
+    closeModal(props.refreshRecords);
 
-    OkToast(_$t("updateTimeRecordSuccess"));
+    OkToast(_$t("updateRecordSuccess"));
   } catch (error) {
     ErrorToast(error);
   } finally {

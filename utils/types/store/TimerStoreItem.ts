@@ -18,5 +18,5 @@ export interface TimerStoreItem {
 
   page: number;
 
-  localRecords: TimeRecordLocal[];
+  localRecords: RecordLocal[];
 }

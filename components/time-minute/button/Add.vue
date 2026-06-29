@@ -2,7 +2,7 @@
 import { CirclePlus } from "lucide-vue-next";
 
 const props = defineProps<{
-  timeRecordId: number;
+  recordId: number;
 }>();
 
 const emit = defineEmits<{
@@ -10,8 +10,8 @@ const emit = defineEmits<{
 }>();
 
 const clickAction = () => {
-  if (!props.timeRecordId) return;
-  emit("open", props.timeRecordId);
+  if (!props.recordId) return;
+  emit("open", props.recordId);
 };
 </script>
 

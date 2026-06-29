@@ -8,7 +8,7 @@ export const deletePeriodAction = async (
 ) => {
   deleteTpIsFetch.value = true;
 
-  const { refetchData } = useTimeRecordHistoryStore();
+  const { refetchData } = useRecordHistoryStore();
 
   try {
     await deletePeriod(periodId);
@@ -35,7 +35,7 @@ export const deleteTimerSessionAction = async (
 ) => {
   deleteTsIsFetch.value = true;
 
-  const { refetchData } = useTimeRecordHistoryStore();
+  const { refetchData } = useRecordHistoryStore();
 
   try {
     await deleteTimerSession(timerSessionId);
@@ -62,7 +62,7 @@ export const deleteTimeMinuteAction = async (
 ) => {
   deleteTmIsFetch.value = true;
 
-  const { refetchData } = useTimeRecordHistoryStore();
+  const { refetchData } = useRecordHistoryStore();
 
   try {
     await timeMinuteApi().delete(minuteId);

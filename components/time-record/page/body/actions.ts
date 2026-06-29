@@ -1,8 +1,8 @@
-export const getTimeRecordQuery = () => {
+export const getRecordQuery = () => {
   const route = useRoute();
   return useQuery({
     key: [`time-record-${route.params.code.toString()}`],
-    query: () => getTimeRecordByCode(`${route.params.code}`),
+    query: () => getRecordByCode(`${route.params.code}`),
     refetchOnWindowFocus: false,
   });
 };

@@ -3,11 +3,11 @@ import { Trash2, EllipsisVertical, RefreshCcwDot, Save } from "lucide-vue-next";
 import { useEventBus } from "@vueuse/core";
 const { loggedIn } = useUserSession();
 
-defineProps<{ row: TimeRecordLocalTable }>();
+defineProps<{ row: RecordLocalTable }>();
 
-const bus = useEventBus<TimeRecordLocalTableBusEvent>(TRL_TABLE_BUS_NAME);
+const bus = useEventBus<RecordLocalTableBusEvent>(TRL_TABLE_BUS_NAME);
 
-const items = (row: TimeRecordLocalTable) => {
+const items = (row: RecordLocalTable) => {
   const actions = [
     {
       label: _$t("deleteLocalSession"),

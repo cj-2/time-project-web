@@ -5,7 +5,7 @@ import { columns as tableColumns } from "./columns";
 import { useDebounceFn } from "@vueuse/core";
 import type { ColumnSort, SortingState } from "@tanstack/vue-table";
 
-const trStore = useTimeRecordStore();
+const trStore = useRecordStore();
 const {
   paginationQuery,
   tableData,
@@ -15,7 +15,7 @@ const {
 
 const emit = defineEmits<{
   access: [value: string];
-  delete: [value: TimeRecordMap];
+  delete: [value: RecordMap];
   create: [];
 }>();
 

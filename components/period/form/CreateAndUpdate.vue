@@ -3,13 +3,14 @@ import { toTypedSchema } from "@vee-validate/yup";
 import { addMinutes, isBefore } from "date-fns";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
+import { _$t } from "~/utils/i18n";
 
 const emit = defineEmits(["close", "refresh"]);
 
 const props = withDefaults(
   defineProps<{
     editObject?: PeriodForm;
-    timeRecordId?: number;
+    recordId?: number;
   }>(),
   {},
 );
@@ -47,7 +48,7 @@ const createAction = async (start: string, end: string) => {
 
   try {
     await postPeriod({
-      timeRecordId: props.timeRecordId!,
+      recordId: props.recordId!,
       start: new Date(start),
       end: new Date(end),
     });
@@ -72,7 +73,7 @@ const editAction = async (id: number, start: string, end: string) => {
 
   try {
     await putPeriod(id, {
-      timeRecordId: props.timeRecordId!,
+      recordId: props.recordId!,
       start: new Date(start),
       end: new Date(end),
     });

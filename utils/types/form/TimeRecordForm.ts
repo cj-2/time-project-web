@@ -1,4 +1,4 @@
-export type TimeRecordForm = {
+export type RecordForm = {
   id?: number;
   title: string;
   description: string;

@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-export const useTimeRecordStore = defineStore(
+export const useRecordStore = defineStore(
   "time-record-store-0001",
   () => {
     const {
@@ -17,7 +17,7 @@ export const useTimeRecordStore = defineStore(
       sortProp: "lastTimeDate",
     });
 
-    const apiRes = ref<Pagination<TimeRecordMap>>();
+    const apiRes = ref<Pagination<RecordMap>>();
     const isPaginationFetch = ref(false);
     const isDeleteFetch = ref(false);
 
@@ -29,7 +29,7 @@ export const useTimeRecordStore = defineStore(
       isPaginationFetch.value = true;
 
       try {
-        const data = await timeRecordApi().get(paginationQuery.value);
+        const data = await recordApi().get(paginationQuery.value);
         if (data) apiRes.value = data;
       } catch (error) {
         ErrorToast(error);
@@ -42,10 +42,10 @@ export const useTimeRecordStore = defineStore(
       await fetchData(false);
     };
 
-    async function deleteTimeRecord(id: number) {
+    async function deleteRecord(id: number) {
       try {
         isDeleteFetch.value = true;
-        await timeRecordApi().delete(id);
+        await recordApi().delete(id);
         await refetchData();
       } finally {
         isDeleteFetch.value = false;
@@ -57,26 +57,26 @@ export const useTimeRecordStore = defineStore(
     });
 
     const tableData = computed(() => {
-      const timeRecordsTable: TimeRecordTable[] = [];
+      const recordsTable: RecordTable[] = [];
 
       if (apiRes.value?.data)
-        apiRes.value.data.forEach((timeRecord) => {
-          timeRecordsTable.push({
-            ...timeRecord,
+        apiRes.value.data.forEach((record) => {
+          recordsTable.push({
+            ...record,
             lastTimeDate:
-              (timeRecord.meta?.lastTimeDate &&
-                format(timeRecord.meta.lastTimeDate, "dd/MM/yyyy")) ||
+              (record.meta?.lastTimeDate &&
+                format(record.meta.lastTimeDate, "dd/MM/yyyy")) ||
               "-",
-            description: timeRecord.description || "-",
-            code: timeRecord.code || "-",
-            name: timeRecord.name || "Sem título",
-            categoryName: timeRecord.categoryName || "-",
-            formattedTime: timeRecord.meta?.formattedTime || "Nenhum",
-            timeCountText: periodLabel(timeRecord.meta?.timeCount!),
+            description: record.description || "-",
+            code: record.code || "-",
+            name: record.name || "Sem título",
+            categoryName: record.categoryName || "-",
+            formattedTime: record.meta?.formattedTime || "Nenhum",
+            timeCountText: periodLabel(record.meta?.timeCount!),
           });
         });
 
-      return timeRecordsTable;
+      return recordsTable;
     });
 
     return {
@@ -95,7 +95,7 @@ export const useTimeRecordStore = defineStore(
       removeFilter,
       updateSort,
 
-      delete: deleteTimeRecord,
+      delete: deleteRecord,
       isDeleteFetch,
     };
   },

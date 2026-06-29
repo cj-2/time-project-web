@@ -1,46 +1,46 @@
-export const getTimeRecords = async (pagQuery: IPaginationQuery) => {
-  return useCustomFetch()<Pagination<TimeRecordMap>>(
+export const getRecords = async (pagQuery: IPaginationQuery) => {
+  return useCustomFetch()<Pagination<RecordMap>>(
     `/records${paginationQueryHandle(pagQuery)}`,
-    { method: "GET" }
+    { method: "GET" },
   );
 };
 
-export const searchTimeRecord = async (search: string = "") => {
-  return useCustomFetch()<SearchTimeRecordItem[]>(
+export const searchRecord = async (search: string = "") => {
+  return useCustomFetch()<SearchRecordItem[]>(
     `/records/search?value=${search}`,
-    { method: "GET" }
+    { method: "GET" },
   );
 };
 
-export const getTimeRecordByCode = async (code: string) => {
-  return useCustomFetch()<TimeRecordMap>(`/records/${code}`, {
+export const getRecordByCode = async (code: string) => {
+  return useCustomFetch()<RecordMap>(`/records/${code}`, {
     method: "GET",
   });
 };
 
-export const postTimeRecord = async (body: CreateTimeRecordDto) => {
-  return useCustomFetch(false)<TimeRecordMap>("/records", {
+export const postRecord = async (body: CreateRecordDto) => {
+  return useCustomFetch(false)<RecordMap>("/records", {
     method: "POST",
     body,
   });
 };
 
-export const putTimeRecord = async (body: UpdateTimeRecordDto) => {
-  return useCustomFetch(false)<TimeRecordMap>(`/records/${body.id}`, {
+export const putRecord = async (body: UpdateRecordDto) => {
+  return useCustomFetch(false)<RecordMap>(`/records/${body.id}`, {
     method: "PUT",
     body,
   });
 };
 
-export const deleteTimeRecord = async (id: number) => {
+export const deleteRecord = async (id: number) => {
   return useCustomFetch(false)<boolean>(`/records/${id}`, { method: "DELETE" });
 };
 
-export const timeRecordApi = () => ({
+export const recordApi = () => ({
   get: async (pagQuery: IPaginationQuery) => {
-    return useCustomFetch()<Pagination<TimeRecordMap>>(
+    return useCustomFetch()<Pagination<RecordMap>>(
       `/records${paginationQueryHandle(pagQuery)}`,
-      { method: "GET" }
+      { method: "GET" },
     );
   },
   delete: async (id: number) => {
@@ -48,12 +48,12 @@ export const timeRecordApi = () => ({
       method: "DELETE",
     });
   },
-  getHistory: async (pagQuery: IPaginationQuery, timeRecordId: number) => {
-    return useCustomFetch()<Pagination<TimeRecordHistoryDayMap>>(
-      `/records/history/${timeRecordId}${paginationQueryHandle(pagQuery)}`,
+  getHistory: async (pagQuery: IPaginationQuery, recordId: number) => {
+    return useCustomFetch()<Pagination<RecordHistoryDayMap>>(
+      `/records/history/${recordId}${paginationQueryHandle(pagQuery)}`,
       {
         method: "GET",
-      }
+      },
     );
   },
 });

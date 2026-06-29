@@ -14,8 +14,8 @@ type CardType = {
 };
 
 const props = defineProps<{
-  timeRecordId?: number;
-  timeRecord?: TimeRecordMap;
+  recordId?: number;
+  record?: RecordMap;
   isFetch?: boolean;
   updatedOn?: Date;
   clearUpdatedOn?: () => void;
@@ -36,8 +36,8 @@ const rangeStatistic = ref<RangeStatistic>();
 const isFetchStatistics = ref(false);
 
 onMounted(() => {
-  if (props.timeRecordId) {
-    updateTimeRecordPageBreadcrumb(props.timeRecord?.name);
+  if (props.recordId) {
+    updateRecordPageBreadcrumb(props.record?.name);
   }
 
   selectedDate.value = route.query.date
@@ -56,10 +56,10 @@ watch(
 );
 
 watch(
-  () => props.timeRecord?.name,
+  () => props.record?.name,
   () => {
-    if (props.timeRecordId) {
-      updateTimeRecordPageBreadcrumb(props.timeRecord?.name);
+    if (props.recordId) {
+      updateRecordPageBreadcrumb(props.record?.name);
     }
   },
 );
@@ -79,7 +79,7 @@ const init = async () => {
   infoCardList.value = [];
   isFetchStatistics.value = true;
 
-  getRangeStatistic(selectedDate.value, props.timeRecordId)
+  getRangeStatistic(selectedDate.value, props.recordId)
     .then((data) => {
       if (props.updatedOn && props.clearUpdatedOn) {
         props.clearUpdatedOn();
@@ -196,21 +196,21 @@ const tableColumns: ColumnDef<unknown>[] = [
 ];
 
 const tableData = computed(() => {
-  const timeRecordsTable: unknown[] = [];
+  const recordsTable: unknown[] = [];
 
-  if (rangeStatistic.value?.timeRecordRangeProgress)
-    rangeStatistic.value?.timeRecordRangeProgress.forEach((trp) => {
-      timeRecordsTable.push({
+  if (rangeStatistic.value?.recordRangeProgress)
+    rangeStatistic.value?.recordRangeProgress.forEach((trp) => {
+      recordsTable.push({
         ...trp,
-        code: trp.timeRecord.code || "-",
-        title: trp.timeRecord.name || "Sem título",
-        category: trp.timeRecord.categoryName || "-",
+        code: trp.record.code || "-",
+        title: trp.record.name || "Sem título",
+        category: trp.record.categoryName || "-",
         day: trp.totalHours,
-        total: trp.timeRecord.meta?.formattedTime,
+        total: trp.record.meta?.formattedTime,
       });
     });
 
-  return timeRecordsTable;
+  return recordsTable;
 });
 
 const referenceDate = computed(() => {
@@ -310,7 +310,7 @@ const referenceDate = computed(() => {
         <Separator class="mt-10" v-if="index + 1 < infoCardList.length" />
       </section>
 
-      <section v-if="!timeRecordId" class="flex flex-col gap-5">
+      <section v-if="!recordId" class="flex flex-col gap-5">
         <GSubTitlePage
           title="Tarefas"
           :description="

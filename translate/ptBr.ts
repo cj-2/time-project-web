@@ -73,8 +73,7 @@ const i18nObj = {
   createTaskFromSession: "Criar tarefa a partir de sessão",
 
   confirmDeleteCategoryMessage: "Tem certeza deseja excluir essa categoria?",
-  confirmDeleteTimeRecordMessage:
-    'Tem certeza deseja excluir a tarefa "{title}"?',
+  confirmDeleteRecordMessage: 'Tem certeza deseja excluir a tarefa "{title}"?',
   confirmDeleteLocalRecordMessage:
     "Tem certeza que deseja excluir esse registro?",
   confirmDeletePeriodMessage: "Tem certeza que quer excluir esse período?",
@@ -143,8 +142,8 @@ const i18nObj = {
   createUserSuccess: "Usuário criado com sucesso.",
   loginSuccess: "Autenticação feita com sucesso.",
   login: "Acessar",
-  createTimeRecordSuccess: "Terefa criada com sucesso.",
-  updateTimeRecordSuccess: "Terefa atualizada com sucesso.",
+  createRecordSuccess: "Terefa criada com sucesso.",
+  updateRecordSuccess: "Terefa atualizada com sucesso.",
 
   deletePeriodSuccess: "Período excluído com sucesso.",
   createPeriodSuccess: "Período criado com sucesso.",

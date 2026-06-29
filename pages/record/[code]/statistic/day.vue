@@ -5,15 +5,15 @@ useHead({ title: "Resumo Diário" });
 
 <template>
   <NuxtLayout name="panel">
-    <TimeRecordPageBody
-      #default="{ actualTimeRecordId, updatedOn, clearUpdatedOn, timeRecord }"
+    <RecordPageBody
+      #default="{ actualRecordId, updatedOn, clearUpdatedOn, record }"
     >
       <StatisticDay
-        :time-record-id="actualTimeRecordId"
-        :time-record="timeRecord"
+        :time-record-id="actualRecordId"
+        :time-record="record"
         :updated-on="updatedOn"
         :clear-updated-on="clearUpdatedOn"
       />
-    </TimeRecordPageBody>
+    </RecordPageBody>
   </NuxtLayout>
 </template>

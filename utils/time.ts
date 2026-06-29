@@ -5,10 +5,10 @@ export const periodLabel = (count?: number) => {
   return !count ? "Nenhum" : count + countText;
 };
 
-export const timeRecordLocalToForm = (
-  obj: Partial<TimeRecordLocal> & { isSync?: boolean; isBind?: boolean },
+export const recordLocalToForm = (
+  obj: Partial<RecordLocal> & { isSync?: boolean; isBind?: boolean },
   callback = () => {},
-): TimeRecordForm => {
+): RecordForm => {
   return {
     id: obj.id || undefined,
     title: obj.title || "",

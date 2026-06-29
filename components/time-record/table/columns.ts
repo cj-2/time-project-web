@@ -11,7 +11,7 @@ import {
   CalendarArrowDownIcon,
 } from "lucide-vue-next";
 
-export const columns: ColumnDef<TimeRecordTable>[] = [
+export const columns: ColumnDef<RecordTable>[] = [
   // {
   //   accessorKey: "lastTimeDate",
   //   header: ({ column }) =>

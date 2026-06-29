@@ -1,6 +1,6 @@
-export type TimeRecordMeta = {
+export type RecordMeta = {
   formattedTime: string;
   timeCount: number;
-  timeRecordDate: string;
+  recordDate: string;
   lastTimeDate: string;
 };

@@ -1,5 +1,5 @@
-export interface TimeRecordLocalTable {
-  timeRecordDate: string;
+export interface RecordLocalTable {
+  recordDate: string;
   periods: PeriodLocal[];
   formattedTime: string;
   code: string | undefined;

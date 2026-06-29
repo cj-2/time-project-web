@@ -1,11 +1,11 @@
 export const getRangeStatistic = async (
   date: Date | null = null,
-  timeRecordId: number | undefined = undefined
+  recordId: number | undefined = undefined,
 ) => {
   return useCustomFetch()<RangeStatistic>(
     `/statistics${
-      timeRecordId ? "/" + timeRecordId : ""
+      recordId ? "/" + recordId : ""
     }/day?date=${date?.toISOString()}`,
-    { method: "GET" }
+    { method: "GET" },
   );
 };

@@ -2,7 +2,7 @@
 import { _$t } from "~/utils/i18n";
 
 defineProps<{
-  timeRecord?: TimeRecordMap;
+  record?: RecordMap;
   isFetch: boolean;
 }>();
 </script>
@@ -19,12 +19,12 @@ defineProps<{
     <Skeleton class="mt-4 h-20 w-full" />
   </div>
 
-  <section v-else-if="timeRecord" class="w-full">
+  <section v-else-if="record" class="w-full">
     <section
       class="flex md:flex-row gap-5 flex-col md:items-center items-start mb-5"
     >
       <h2 class="text-4xl font-bold">
-        {{ timeRecord.name || _$t("noTitle") }}
+        {{ record.name || _$t("noTitle") }}
       </h2>
 
       <slot name="button"></slot>
@@ -33,15 +33,15 @@ defineProps<{
     <p class="text-2xl pb-6 font-medium">
       Tempo total:
       <span class="text-primary font-bold">
-        {{ timeRecord.meta?.formattedTime || _$t("none") }}
+        {{ record.meta?.formattedTime || _$t("none") }}
       </span>
     </p>
 
-    <p v-if="timeRecord.code" class="text-lg font-medium pb-4">
+    <p v-if="record.code" class="text-lg font-medium pb-4">
       {{ _$t("code") }}:
-      <span class="font-normal">{{ timeRecord.code }}</span>
+      <span class="font-normal">{{ record.code }}</span>
     </p>
 
-    <TimeRecordCardAbout :time-record="timeRecord" />
+    <RecordCardAbout :time-record="record" />
   </section>
 </template>

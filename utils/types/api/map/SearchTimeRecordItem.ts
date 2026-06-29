@@ -1,4 +1,4 @@
-export type SearchTimeRecordItem = {
+export type SearchRecordItem = {
   id: number;
   title: string;
   code: string;

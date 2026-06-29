@@ -27,12 +27,12 @@ export type RangeStatistic = {
   averageInHours: number;
   averageInMinutes: number;
 
-  timeRecordRangeProgress: TimeRecordRangeProgress[] | null;
+  recordRangeProgress: RecordRangeProgress[] | null;
 };
 
-export type TimeRecordRangeProgress = {
+export type RecordRangeProgress = {
   totalHours: string;
-  timeRecord: TimeRecordMap;
+  record: RecordMap;
 };
 
 export type RangeStatisticsWithDays = {

@@ -1,26 +1,26 @@
 <script lang="ts" setup>
 import { Edit } from "lucide-vue-next";
 import { _$t } from "~/utils/i18n";
-const editTimeRecordObject = ref<TimeRecordForm>();
+const editRecordObject = ref<RecordForm>();
 
 const props = defineProps<{
-  timeRecord: TimeRecordMap;
+  record: RecordMap;
   callback: (code?: string) => Promise<void>;
 }>();
 
 const modal = reactive({
-  updateTimeRecord: {
+  updateRecord: {
     open: false,
   },
 });
 
-const openTimeRecordModal = () => {
-  modal.updateTimeRecord.open = true;
-  const tr = props.timeRecord;
+const openRecordModal = () => {
+  modal.updateRecord.open = true;
+  const tr = props.record;
 
   if (!tr) return;
 
-  editTimeRecordObject.value = {
+  editRecordObject.value = {
     id: tr.recordId,
     title: tr.name,
     description: tr.description,
@@ -32,28 +32,28 @@ const openTimeRecordModal = () => {
   };
 };
 
-const closeTimeRecordModal = () => {
-  modal.updateTimeRecord.open = false;
-  editTimeRecordObject.value = undefined;
+const closeRecordModal = () => {
+  modal.updateRecord.open = false;
+  editRecordObject.value = undefined;
 };
 </script>
 
 <template>
-  <Button @click="openTimeRecordModal">
+  <Button @click="openRecordModal">
     <Edit />
     {{ _$t("edit") }}
   </Button>
 
   <Dialog
-    v-bind:open="modal.updateTimeRecord.open"
-    @update:open="!$event && closeTimeRecordModal()"
+    v-bind:open="modal.updateRecord.open"
+    @update:open="!$event && closeRecordModal()"
   >
     <DialogContent @interact-outside="$event.preventDefault()">
       <DialogHeader>
         <DialogTitle>
           <span class="mr-2"> {{ _$t("task") }} </span>
-          <Badge v-if="editTimeRecordObject?.code" variant="outline">
-            {{ editTimeRecordObject?.code }}
+          <Badge v-if="editRecordObject?.code" variant="outline">
+            {{ editRecordObject?.code }}
           </Badge>
         </DialogTitle>
 
@@ -62,10 +62,10 @@ const closeTimeRecordModal = () => {
         </DialogDescription>
       </DialogHeader>
 
-      <TimeRecordFormCreateAndUpdate
-        :edit-object="editTimeRecordObject"
+      <RecordFormCreateAndUpdate
+        :edit-object="editRecordObject"
         hide-time-periods
-        @close="closeTimeRecordModal"
+        @close="closeRecordModal"
       />
     </DialogContent>
   </Dialog>

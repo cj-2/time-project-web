@@ -2,11 +2,11 @@
 import { useEventBus } from "@vueuse/core";
 import { Trash2, EllipsisVertical, Link } from "lucide-vue-next";
 
-defineProps<{ row: TimeRecordTable }>();
+defineProps<{ row: RecordTable }>();
 
-const bus = useEventBus<TimeRecordTableBusEvent>(TR_TABLE_BUS_NAME);
+const bus = useEventBus<RecordTableBusEvent>(TR_TABLE_BUS_NAME);
 
-const items = (row: TimeRecordTable) => [
+const items = (row: RecordTable) => [
   {
     label: _$t("access"),
     icon: Link,

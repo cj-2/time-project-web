@@ -1,29 +1,29 @@
 <script lang="ts" setup>
 import { History, Flame } from "lucide-vue-next";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-import { getTimeRecordQuery } from "./body/actions";
+import { getRecordQuery } from "./body/actions";
 import { _$t } from "~/utils/i18n";
 
 const router = useRouter();
 const route = useRoute();
 
-const { state, isLoading, refresh } = getTimeRecordQuery();
+const { state, isLoading, refresh } = getRecordQuery();
 
-const timeRecord = computed(() => {
+const record = computed(() => {
   return state.value.data;
 });
 
 const title = computed(() => {
-  return timeRecord.value?.name || "";
+  return record.value?.name || "";
 });
 
 useHead({ title });
 
-const actualTimeRecordId = computed(() => {
+const actualRecordId = computed(() => {
   return state.value.data?.recordId;
 });
 
-const refreshTimeRecord = async (code = "") => {
+const refreshRecord = async (code = "") => {
   const router = useRouter();
 
   if (code && code != route.params.code) {
@@ -79,7 +79,7 @@ const links = computed(() => [
 
 const refreshPeriodCallback = async () => {
   setUpdatedOn();
-  refreshTimeRecord();
+  refreshRecord();
 };
 </script>
 
@@ -88,24 +88,24 @@ const refreshPeriodCallback = async () => {
     <section class="flex flex-col gap-10 md:gap-5 w-full">
       <section class="flex flex-col md:flex-row gap-10">
         <section class="w-full">
-          <TimeRecordPageHeader :time-record="timeRecord" :is-fetch="isLoading">
+          <RecordPageHeader :time-record="record" :is-fetch="isLoading">
             <template #button>
-              <TimeRecordButtonEdit
-                v-if="actualTimeRecordId && timeRecord"
-                :time-record="timeRecord"
-                :callback="refreshTimeRecord"
+              <RecordButtonEdit
+                v-if="actualRecordId && record"
+                :time-record="record"
+                :callback="refreshRecord"
               />
             </template>
-          </TimeRecordPageHeader>
+          </RecordPageHeader>
         </section>
 
-        <section v-if="timeRecord" class="max-md:w-full flex justify-center">
+        <section v-if="record" class="max-md:w-full flex justify-center">
           <ClientOnly>
             <TimerDefault
-              v-if="actualTimeRecordId && timeRecord"
-              :id="actualTimeRecordId"
-              :code="timeRecord.code"
-              :title="timeRecord.name"
+              v-if="actualRecordId && record"
+              :id="actualRecordId"
+              :code="record.code"
+              :title="record.name"
               :post-time-period-callback="refreshPeriodCallback"
             />
 
@@ -152,21 +152,21 @@ const refreshPeriodCallback = async () => {
         </NavigationMenu>
       </section>
 
-      <section v-if="timeRecord" class="w-full md:col-span-12 md:mb-5">
+      <section v-if="record" class="w-full md:col-span-12 md:mb-5">
         <slot
           v-bind="{
-            actualTimeRecordId,
+            actualRecordId,
             isLoading,
             updatedOn,
             clearUpdatedOn,
             refreshPeriodCallback,
-            timeRecord,
+            record,
           }"
         ></slot>
       </section>
     </section>
 
-    <section class="w-full" v-if="!timeRecord && !isLoading">
+    <section class="w-full" v-if="!record && !isLoading">
       <h2 class="text-2xl font-bold pb-3">
         {{ _$t("recordNotFound") }}
       </h2>

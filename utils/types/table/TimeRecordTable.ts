@@ -1,4 +1,4 @@
-export interface TimeRecordTable extends TimeRecordMap {
+export interface RecordTable extends RecordMap {
   timeCountText: string;
   lastTimeDate: string;
   formattedTime: string;

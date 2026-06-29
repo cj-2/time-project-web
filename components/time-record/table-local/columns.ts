@@ -2,9 +2,9 @@ import type { ColumnDef } from "@tanstack/vue-table";
 import Actions from "./Actions.vue";
 import Col from "./Col.vue";
 
-export const columns: ColumnDef<TimeRecordLocalTable>[] = [
+export const columns: ColumnDef<RecordLocalTable>[] = [
   {
-    accessorKey: "timeRecordDate",
+    accessorKey: "recordDate",
     header: () => h("div", { variant: "ghost" }, ["Data"]),
   },
   {

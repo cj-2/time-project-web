@@ -11,7 +11,7 @@ const emit = defineEmits<{
 
 const editData = reactive<PeriodForm>({
   id: 0,
-  timeRecordId: 0,
+  recordId: 0,
   end: "",
   start: "",
   callback: () => {},
@@ -23,7 +23,7 @@ const clickAction = async () => {
   editData.id = tp.periodId;
   editData.start = tp.start;
   editData.end = tp.end;
-  editData.timeRecordId = tp.recordId;
+  editData.recordId = tp.recordId;
   editData.callback = () => {};
 
   emit("open", editData);

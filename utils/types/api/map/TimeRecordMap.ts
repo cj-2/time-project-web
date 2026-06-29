@@ -1,4 +1,4 @@
-export type TimeRecordMap = {
+export type RecordMap = {
   recordId: number;
   name: string;
   description: string;
@@ -8,5 +8,5 @@ export type TimeRecordMap = {
   categoryId: number | null;
   code: string;
   externalLink: string;
-  meta: TimeRecordMeta | null;
+  meta: RecordMeta | null;
 };

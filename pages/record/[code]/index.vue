@@ -7,27 +7,27 @@ definePageMeta({
 
 <template>
   <NuxtLayout name="panel">
-    <TimeRecordPageBody
+    <RecordPageBody
       #default="{
-        actualTimeRecordId,
+        actualRecordId,
         updatedOn,
         clearUpdatedOn,
         refreshPeriodCallback,
-        timeRecord,
+        record,
       }"
     >
       <ClientOnly>
         <HistoryDayList
           ref="historyTp"
-          v-if="actualTimeRecordId"
-          :time-record-id="actualTimeRecordId"
-          :time-record="timeRecord"
+          v-if="actualRecordId"
+          :time-record-id="actualRecordId"
+          :time-record="record"
           :callback="refreshPeriodCallback"
           :updated-on="updatedOn"
           :clear-updated-on="clearUpdatedOn"
         />
       </ClientOnly>
-    </TimeRecordPageBody>
+    </RecordPageBody>
   </NuxtLayout>
 </template>
 

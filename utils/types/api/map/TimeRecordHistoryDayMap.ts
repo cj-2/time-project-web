@@ -1,4 +1,4 @@
-export type TimeRecordHistoryDayMap = {
+export type RecordHistoryDayMap = {
   date: string;
   count: number;
   periods: PeriodMap[];
@@ -12,7 +12,7 @@ export type TimeRecordHistoryDayMap = {
   formattedTime: string;
 };
 
-export type TimeRecordHistoryDayChart = {
+export type RecordHistoryDayChart = {
   date: string;
   timeInMinutes: number;
   timeInHours: number;

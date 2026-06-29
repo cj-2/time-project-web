@@ -1,6 +1,6 @@
-export interface TimeRecordLocalTableBusEvent {
+export interface RecordLocalTableBusEvent {
   action: "delete" | "sync" | "bind" | "createFrom";
-  data: TimeRecordLocalTable;
+  data: RecordLocalTable;
 }
 
 export const TRL_TABLE_BUS_NAME = "time-record-local-table";

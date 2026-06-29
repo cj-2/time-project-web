@@ -2,7 +2,7 @@
 import { _$t } from "~/utils/i18n";
 
 defineProps<{
-  timeRecord: TimeRecordMap;
+  record: RecordMap;
 }>();
 </script>
 
@@ -10,31 +10,31 @@ defineProps<{
   <Card>
     <CardContent>
       <p class="text-lg mt-6 pb-2">
-        <span v-if="timeRecord.description" class="font-normal">
-          {{ timeRecord.description }}
+        <span v-if="record.description" class="font-normal">
+          {{ record.description }}
         </span>
         <span v-else class="font-normal">
           {{ _$t("emptyRecordDescription") }}
         </span>
       </p>
 
-      <p v-if="timeRecord.categoryName" class="text-lg font-medium">
+      <p v-if="record.categoryName" class="text-lg font-medium">
         {{ _$t("category") }}:
-        <span class="font-normal">{{ timeRecord.categoryName }}</span>
+        <span class="font-normal">{{ record.categoryName }}</span>
       </p>
 
-      <p v-if="timeRecord.externalLink" class="text-lg font-medium flex gap-2">
+      <p v-if="record.externalLink" class="text-lg font-medium flex gap-2">
         {{ _$t("externalLink") }}:
 
         <span
           class="max-w-44 overflow-hidden inline-block overflow-ellipsis whitespace-nowrap"
         >
           <a
-            :href="timeRecord.externalLink"
+            :href="record.externalLink"
             target="_blank"
             class="underline hover:text-primary font-normal"
           >
-            {{ timeRecord.externalLink }}
+            {{ record.externalLink }}
           </a>
         </span>
       </p>

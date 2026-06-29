@@ -1,22 +1,22 @@
 export const tpModal = reactive<{
   open: boolean;
-  timeRecordId?: number;
+  recordId?: number;
   form?: PeriodForm;
 }>({
   open: false,
-  timeRecordId: undefined,
+  recordId: undefined,
   form: undefined,
 });
 
-export const createPeriod = (timeRecordId: number) => {
+export const createPeriod = (recordId: number) => {
   tpModal.open = true;
-  tpModal.timeRecordId = timeRecordId;
+  tpModal.recordId = recordId;
   tpModal.form = undefined;
 };
 
 export const editPeriod = (period: PeriodForm) => {
   tpModal.open = true;
-  tpModal.timeRecordId = undefined;
+  tpModal.recordId = undefined;
   tpModal.form = period;
 };
 
@@ -72,16 +72,16 @@ export const closeDeleteTmModal = () => {
 
 export const tmModal = reactive<{
   open: boolean;
-  timeRecordId?: number;
+  recordId?: number;
   form?: PeriodForm;
 }>({
   open: false,
-  timeRecordId: undefined,
+  recordId: undefined,
 });
 
-export const createTimeMinute = (timeRecordId: number) => {
+export const createTimeMinute = (recordId: number) => {
   tmModal.open = true;
-  tmModal.timeRecordId = timeRecordId;
+  tmModal.recordId = recordId;
 };
 
 export const closeTimeMinuteModal = async (

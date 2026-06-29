@@ -1,5 +1,5 @@
 export type PeriodDto = {
-  timeRecordId: number;
+  recordId: number;
   start: Date;
   end: Date;
 };

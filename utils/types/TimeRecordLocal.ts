@@ -1,10 +1,10 @@
-export interface TimeRecordLocal {
+export interface RecordLocal {
   id: number | null;
   code?: string;
   localUuid: string;
   title: string;
   description: string;
-  timeRecordDate: string;
+  recordDate: string;
   periods: PeriodLocal[];
   timerSessionType?: string;
   timerSessionFrom?: string;

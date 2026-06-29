@@ -4,8 +4,8 @@ export const timeMinuteApi = () => ({
       method: "DELETE",
     });
   },
-  post: async (dto: CreateTimeMinuteListDto, timeRecordId: number) => {
-    return useCustomFetch(false)<boolean>(`/minutes/list/${timeRecordId}`, {
+  post: async (dto: CreateTimeMinuteListDto, recordId: number) => {
+    return useCustomFetch(false)<boolean>(`/minutes/list/${recordId}`, {
       method: "POST",
       body: dto,
     });

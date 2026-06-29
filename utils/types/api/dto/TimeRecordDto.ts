@@ -1,4 +1,4 @@
-export interface TimeRecordSharedDto {
+export interface RecordSharedDto {
   title?: string;
   description?: string;
   code?: string;
@@ -8,10 +8,10 @@ export interface TimeRecordSharedDto {
   timerSessionFrom?: string;
 }
 
-export interface CreateTimeRecordDto extends TimeRecordSharedDto {
+export interface CreateRecordDto extends RecordSharedDto {
   periods: { start: Date | string; end: Date | string }[];
 }
 
-export interface UpdateTimeRecordDto extends TimeRecordSharedDto {
+export interface UpdateRecordDto extends RecordSharedDto {
   id: number;
 }

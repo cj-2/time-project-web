@@ -3,7 +3,7 @@ import { ptBR } from "date-fns/locale";
 
 import { defineStore } from "pinia";
 
-export const useTimeRecordHistoryStore = defineStore(
+export const useRecordHistoryStore = defineStore(
   "time-record-history-store",
   () => {
     const {
@@ -17,12 +17,12 @@ export const useTimeRecordHistoryStore = defineStore(
       updatePaginationQueryWithRoute,
     } = usePaginationQuery("trh_");
 
-    const apiRes = ref<Pagination<TimeRecordHistoryDayMap>>();
+    const apiRes = ref<Pagination<RecordHistoryDayMap>>();
     const isPaginationFetch = ref(false);
-    const timeRecordId = ref<number>();
+    const recordId = ref<number>();
 
-    const setTimeRecordId = (value: number) => {
-      timeRecordId.value = value;
+    const setRecordId = (value: number) => {
+      recordId.value = value;
     };
 
     const fetchData = async (updatePaginationQuery = true) => {
@@ -33,9 +33,9 @@ export const useTimeRecordHistoryStore = defineStore(
       isPaginationFetch.value = true;
 
       try {
-        const data = await timeRecordApi().getHistory(
+        const data = await recordApi().getHistory(
           paginationQuery.value,
-          timeRecordId.value!,
+          recordId.value!,
         );
         if (data) apiRes.value = data;
       } catch (error) {
@@ -51,7 +51,7 @@ export const useTimeRecordHistoryStore = defineStore(
 
     const isDeleteFetch = ref(false);
 
-    const deleteTimeRecord = async (id: number) => {
+    const deleteRecord = async (id: number) => {
       try {
         isDeleteFetch.value = true;
         await categoryApi().delete(id);
@@ -76,7 +76,7 @@ export const useTimeRecordHistoryStore = defineStore(
       const days = eachDayOfInterval({
         start: firstDay.date,
         end: lastDay.date,
-      }).map<TimeRecordHistoryDayChart>((i) => ({
+      }).map<RecordHistoryDayChart>((i) => ({
         date: i.toISOString(),
         timeInHours: 0,
         timeInMinutes: 0,
@@ -134,7 +134,7 @@ export const useTimeRecordHistoryStore = defineStore(
       chartData,
       chartDataFormat,
 
-      setTimeRecordId,
+      setRecordId,
 
       setPage,
       setPerPage,
@@ -143,7 +143,7 @@ export const useTimeRecordHistoryStore = defineStore(
       removeFilter,
       updateSort,
 
-      delete: deleteTimeRecord,
+      delete: deleteRecord,
       isDeleteFetch,
     };
   },

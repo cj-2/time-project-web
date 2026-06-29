@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { _$t } from "~/utils/i18n";
 
 const modal = reactive({
-  createOrUpdateTimeRecord: false,
+  createOrUpdateRecord: false,
   confirmDelete: {
     open: false,
     id: null as null | number,
@@ -14,10 +14,10 @@ const modal = reactive({
   },
 });
 
-const trStore = useTimeRecordStore();
+const trStore = useRecordStore();
 const { isDeleteFetch } = storeToRefs(trStore);
 
-const editTimeRecordObject = ref<TimeRecordForm | undefined>(undefined);
+const editRecordObject = ref<RecordForm | undefined>(undefined);
 const router = useRouter();
 
 const formConfirmSchema = toTypedSchema(
@@ -41,7 +41,7 @@ const closeConfirmDeleteModal = () => {
   modal.confirmDelete.open = false;
 };
 
-const openConfirmDeleteModal = async (event: TimeRecordTableBusEvent) => {
+const openConfirmDeleteModal = async (event: RecordTableBusEvent) => {
   const tr = event.data;
 
   modal.confirmDelete.id = tr.recordId;
@@ -61,13 +61,13 @@ const access = (code: string) => {
 };
 
 const closeModal = () => {
-  modal.createOrUpdateTimeRecord = false;
-  editTimeRecordObject.value = undefined;
+  modal.createOrUpdateRecord = false;
+  editRecordObject.value = undefined;
 };
 
-const onSubmit = handleSubmit(() => deleteTimeRecord());
+const onSubmit = handleSubmit(() => deleteRecord());
 
-const deleteTimeRecord = async () => {
+const deleteRecord = async () => {
   if (!modal.confirmDelete.id) return;
 
   try {
@@ -79,9 +79,9 @@ const deleteTimeRecord = async () => {
   }
 };
 
-const bus = useEventBus<TimeRecordTableBusEvent>(TR_TABLE_BUS_NAME);
+const bus = useEventBus<RecordTableBusEvent>(TR_TABLE_BUS_NAME);
 
-const handleWithBus = (event: TimeRecordTableBusEvent) => {
+const handleWithBus = (event: RecordTableBusEvent) => {
   if (event.action == "access") {
     router.push({
       name: "record",
@@ -104,9 +104,9 @@ onBeforeUnmount(() => {
 <template>
   <section class="grid grid-cols-12 gap-5 w-full">
     <section class="col-span-full lg:col-span-12">
-      <TimeRecordTable
+      <RecordTable
         @access="access"
-        @create="modal.createOrUpdateTimeRecord = true"
+        @create="modal.createOrUpdateRecord = true"
       />
     </section>
   </section>
@@ -114,7 +114,7 @@ onBeforeUnmount(() => {
   <GModalConfirm
     v-model:open="modal.confirmDelete.open"
     :title="
-      $t('confirmDeleteTimeRecordMessage', {
+      $t('confirmDeleteRecordMessage', {
         title: modal.confirmDelete.title,
       })
     "
@@ -146,7 +146,7 @@ onBeforeUnmount(() => {
   </GModalConfirm>
 
   <Dialog
-    v-bind:open="modal.createOrUpdateTimeRecord"
+    v-bind:open="modal.createOrUpdateRecord"
     @update:open="!$event && closeModal()"
   >
     <DialogContent @interact-outside="$event.preventDefault()">
@@ -160,7 +160,7 @@ onBeforeUnmount(() => {
         </DialogDescription>
       </DialogHeader>
 
-      <TimeRecordFormCreateAndUpdate @close="closeModal" />
+      <RecordFormCreateAndUpdate @close="closeModal" />
     </DialogContent>
   </Dialog>
 </template>

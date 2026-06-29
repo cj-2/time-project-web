@@ -19,7 +19,7 @@ export type TaskTimeDistribution = {
   totalTime: string;
   percentage: number;
   sessionCount: number;
-  timeRecordId?: string;
+  recordId?: string;
 };
 
 export type CommonTask = {

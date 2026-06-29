@@ -107,30 +107,30 @@ export const useTimerStore = defineStore("TimerStore", {
       );
     },
 
-    getTimeRecords(id: number | null = null) {
+    getRecords(id: number | null = null) {
       const timer = this.getTimer(id);
       const start: number = (timer.page - 1) * this._perPage;
       const end: number = start + this._perPage;
 
-      return timer.localRecords.slice(start, end).map((timeRecord) => {
+      return timer.localRecords.slice(start, end).map((record) => {
         return {
-          ...timeRecord,
-          timeRecordDate: format(timeRecord.periods[0].start, "dd/MM/yyyy"),
-          periods: timeRecord.periods.map((e) => e),
-          formattedTime: formatPeriodListToString(timeRecord.periods),
-          code: timeRecord.code,
+          ...record,
+          recordDate: format(record.periods[0].start, "dd/MM/yyyy"),
+          periods: record.periods.map((e) => e),
+          formattedTime: formatPeriodListToString(record.periods),
+          code: record.code,
         };
       });
     },
 
     // actions
 
-    addTimeRecordLocal(timeRecord: TimeRecordLocal, id: number | null = null) {
+    addRecordLocal(record: RecordLocal, id: number | null = null) {
       const timer = this.getTimer(id);
-      timer.localRecords.unshift(timeRecord);
+      timer.localRecords.unshift(record);
     },
 
-    deleteTimeRecordLocal(uuid: string, id: number | null = null) {
+    deleteRecordLocal(uuid: string, id: number | null = null) {
       const timer = this.getTimer(id);
       const indexTimer = timer.localRecords.findIndex(
         (r) => r.localUuid === uuid,
@@ -240,12 +240,12 @@ export const useTimerStore = defineStore("TimerStore", {
       if (timer.isRun) this.pauseTimer(id);
 
       if (timer.currentPeriodList.length && !timer.isRun) {
-        const timeRecord: TimeRecordLocal = {
+        const record: RecordLocal = {
           id: null,
           localUuid: uuidv4(),
           title: "",
           description: "",
-          timeRecordDate: new Date().toISOString(),
+          recordDate: new Date().toISOString(),
           periods: timer.currentPeriodList.map((p) => ({
             start: new Date(p.start),
             end: new Date(p.end),
@@ -254,14 +254,14 @@ export const useTimerStore = defineStore("TimerStore", {
           timerSessionFrom: "browser",
         };
 
-        if (timer.id) timeRecord.id = timer.id;
-        if (timer.code) timeRecord.code = timer.code;
+        if (timer.id) record.id = timer.id;
+        if (timer.code) record.code = timer.code;
 
         if (timer.id) {
           timer.isFetch = true;
 
           postPeriodList(timer.id, {
-            periods: timeRecord.periods,
+            periods: record.periods,
             type: timer.type,
             from: "browser",
           })
@@ -270,13 +270,13 @@ export const useTimerStore = defineStore("TimerStore", {
                 this._postTPCallback(timer.code);
             })
             .catch(() => {
-              this.addTimeRecordLocal(timeRecord, timer.id);
+              this.addRecordLocal(record, timer.id);
             })
             .finally(() => {
               timer.isFetch = false;
             });
         } else {
-          this.addTimeRecordLocal(timeRecord);
+          this.addRecordLocal(record);
         }
       }
 

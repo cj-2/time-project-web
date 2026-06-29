@@ -190,21 +190,21 @@ const tableColumns: ColumnDef<unknown>[] = [
 ];
 
 const tableData = computed(() => {
-  const timeRecordsTable: unknown[] = [];
+  const recordsTable: unknown[] = [];
 
-  if (statistics.value?.total.timeRecordRangeProgress)
-    statistics.value?.total.timeRecordRangeProgress.forEach((trp) => {
-      timeRecordsTable.push({
+  if (statistics.value?.total.recordRangeProgress)
+    statistics.value?.total.recordRangeProgress.forEach((trp) => {
+      recordsTable.push({
         ...trp,
-        code: trp.timeRecord.code || "-",
-        title: trp.timeRecord.name || "Sem título",
-        category: trp.timeRecord.categoryName || "-",
+        code: trp.record.code || "-",
+        title: trp.record.name || "Sem título",
+        category: trp.record.categoryName || "-",
         week: trp.totalHours,
-        total: trp.timeRecord.meta?.formattedTime,
+        total: trp.record.meta?.formattedTime,
       });
     });
 
-  return timeRecordsTable;
+  return recordsTable;
 });
 </script>
 

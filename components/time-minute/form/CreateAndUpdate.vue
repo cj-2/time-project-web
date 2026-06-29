@@ -10,10 +10,10 @@ const emit = defineEmits(["close", "refresh"]);
 
 const props = withDefaults(
   defineProps<{
-    timeRecordId?: number;
+    recordId?: number;
     callback?: () => void;
   }>(),
-  {}
+  {},
 );
 
 const formSchema = toTypedSchema(
@@ -21,7 +21,7 @@ const formSchema = toTypedSchema(
     minutes: yup.array(yup.number().required()).required(),
     date: yup.date().required('O campo "Dia dos registros" é obrigatório.'),
     minutesToAdd: yup.number(),
-  })
+  }),
 );
 
 const {
@@ -55,7 +55,7 @@ const createAction = async (dto: CreateTimeMinuteListDto) => {
   let submitIsOk = true;
 
   try {
-    await timeMinuteApi().post(dto, props.timeRecordId!);
+    await timeMinuteApi().post(dto, props.recordId!);
 
     OkToast(_$t("createTimeMinuteSuccess"));
     closeModal(true);
