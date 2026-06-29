@@ -3,17 +3,17 @@ useHead({
   titleTemplate: "%s %separator %siteName",
   templateParams: {
     separator: "—",
-    siteName: "Registra meu tempo aí!",
+    siteName: "Time Project",
   },
   meta: [
-    { name: "google-adsense-account", content: "ca-pub-5691189191143225" },
+    // { name: "google-adsense-account", content: "ca-pub-5691189191143225" },
   ],
   script: [
-    {
-      src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5691189191143225",
-      crossorigin: "anonymous",
-      async: true,
-    },
+    // {
+    //   src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5691189191143225",
+    //   crossorigin: "anonymous",
+    //   async: true,
+    // },
   ],
   link: [
     {

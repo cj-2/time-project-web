@@ -8,7 +8,7 @@ const ErrorTranslateList = [
   ["send_recovery_email_error", "sendRecoveryError"],
 
   ["email_already_in_use", "emailInUse"],
-  ["user_not_found", "userNotFound"],
+  ["email_or_password_wrong", "email_or_password_wrong"],
   ["password_not_allowed", "passwordNotAllowed"],
 ];
 

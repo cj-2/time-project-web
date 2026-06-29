@@ -3,7 +3,7 @@
   <div class="flex flex-col gap-5">
     <GTitlePage
       title="Dashboard"
-      description="Visão geral do seu controle de tempo e produtividade"
+      description="Visão geral do seu controle de tempo e produtividade."
     />
 
     <!-- Quick Stats -->

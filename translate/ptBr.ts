@@ -117,7 +117,7 @@ const i18nObj = {
 	createAccount: "Criar conta",
 	recoveryPassword: "Recuperar senha",
 
-	userNotFound: "E-mail ou senha incorretos.",
+	email_or_password_wrong: "E-mail ou senha incorretos.",
 	passwordNotAllowed: "Não foi possível fazer a autenticação por esse método.",
 
 	emailIsInvalid: "Digite um e-mail válido.",
