@@ -1,0 +1,737 @@
+<script lang="ts" setup>
+import * as yup from "yup";
+import { toTypedSchema } from "@vee-validate/yup";
+import { addMinutes } from "date-fns";
+import { vMaska } from "maska/vue";
+import { useDebounceFn } from "@vueuse/core";
+import { useForm } from "vee-validate";
+import { X, Check, Search, ChevronsUpDown, PenLine } from "lucide-vue-next";
+import { v4 as uuidv4 } from "uuid";
+import { _$t } from "~/utils/i18n";
+import { cn } from "~/lib/utils";
+
+const emit = defineEmits(["close", "refresh"]);
+
+const props = withDefaults(
+  defineProps<{
+    editObject?: RecordForm;
+    hidePeriods?: boolean;
+    refreshRecords?: boolean;
+  }>(),
+  {},
+);
+
+const router = useRouter();
+const trStore = useRecordStore();
+
+const allCategoriesStore = useAllCategoriesStore();
+const { fetchData } = allCategoriesStore;
+const { data: allCategories, isFetching: isAllCategoriesFetching } =
+  storeToRefs(allCategoriesStore);
+
+const formOptions = reactive<{
+  isSync?: boolean; // Quando os tp já possuem um id para vincular.
+  isBind?: boolean; // Quando há a seleção de uma tarefa para enviar os tp.
+  callback?: (code?: string) => void;
+}>({
+  callback: undefined,
+  isSync: false,
+  isBind: false,
+});
+
+const formSchema = toTypedSchema(
+  yup.object({
+    id: yup.number(),
+    title: yup.string(),
+    periods: yup.array(
+      yup.object({
+        id: yup.string().required(),
+        start: yup.date().required(),
+        end: yup.date().required(),
+      }),
+    ),
+    description: yup.string(),
+    externalLink: yup.string().url(),
+    code: yup.string().when("id", {
+      is: (val: string) => {
+        return Boolean(val) && !props.editObject?.isBind;
+      },
+      then: (s) => s.required("Código não é um campo opcional."),
+      otherwise: (s) => s,
+    }),
+    category: yup.string(),
+    timerSessionType: yup.string(),
+    timerSessionFrom: yup.string(),
+  }),
+);
+
+const {
+  handleSubmit,
+  values: formValues,
+  errors,
+  setValues,
+} = useForm({
+  validationSchema: formSchema,
+  initialValues: {
+    title: "",
+    description: "",
+    timerSessionType: "manual",
+    timerSessionFrom: "browser",
+    periods: [],
+  },
+});
+
+watch(
+  () => formValues.code,
+  (newValue) => {
+    setValues({
+      code: newValue?.replace(" ", "") || "",
+    });
+  },
+);
+
+/**
+ * start: Category
+ */
+
+const categorySelectSearch = ref("");
+const categorySelectIsOpen = ref(false);
+const newCategories = ref<string[]>([]);
+
+const categories = computed(() => {
+  return [
+    ...newCategories.value.map((c) => ({ name: c, id: -1 })),
+    ...allCategories.value,
+  ];
+});
+
+const isNewCategoryOnSelectSearch = computed(() => {
+  return categories.value.every((c) => c.name != categorySelectSearch.value);
+});
+
+const categoryValue = computed({
+  get: () => formValues.category,
+
+  set: async (name) => {
+    if (name == undefined) return;
+
+    const search = categories.value.find((category) => category.name === name);
+
+    if (!search) {
+      newCategories.value = [name];
+    }
+
+    setValues({ category: name });
+  },
+});
+
+const categoryIsDisabled = computed(() => {
+  return isAllCategoriesFetching.value;
+});
+
+const handleCategory = async () => {
+  if (
+    (newCategories.value.length && formValues.category,
+    formValues.category === newCategories.value[0])
+  ) {
+    const category = await categoryApi().post({ name: newCategories.value[0] });
+    return category!.categoryId;
+  }
+
+  if (formValues.category) {
+    const category = allCategories.value.find(
+      (category) => category.name === formValues.category,
+    );
+
+    if (category) return category.categoryId;
+  }
+
+  return null;
+};
+
+const clearCategoryIfClickAgain = (value: string) => {
+  if (value === categoryValue.value) {
+    setValues({ category: "" });
+  }
+};
+
+/**
+ * end: Category
+ */
+
+/**
+ * start: Time Period
+ */
+
+const addButtonIsDisabled = computed(() => {
+  const initialValue = true;
+
+  const allHasValue = formValues.periods?.reduce((acc, current) => {
+    return !!current.start && !!current.end && acc;
+  }, initialValue);
+
+  return allHasValue === false;
+});
+
+const addPeriodToForm = () => {
+  const start =
+    formValues?.periods?.length === 0
+      ? new Date()
+      : addMinutes(formValues.periods![formValues.periods!.length - 1].end, 15);
+
+  const end = addMinutes(start, 25);
+
+  const periods = [...(formValues.periods ?? []), { start, end, id: uuidv4() }];
+  setValues({ periods });
+};
+
+const deletePeriodFromForm = (index: number) => {
+  const periods = formValues.periods ? [...formValues.periods] : [];
+  periods.splice(index, 1);
+  setValues({ periods });
+};
+
+/**
+ * end: Time Period
+ */
+
+/**
+ * start: Time Record
+ */
+
+const searchTrList = ref<SearchRecordItem[]>([]);
+const selectedTr = ref<SearchRecordItem>();
+const isTrSearch = ref<boolean>(false);
+
+const searchTr = async (q: string = "") => {
+  try {
+    isTrSearch.value = true;
+    const result = await searchRecord(q);
+
+    if (result) {
+      searchTrList.value = result.map((item) => {
+        item.title = item.title ? `${item.title} (${item.code})` : item.code;
+        return item;
+      });
+    }
+
+    return result;
+  } finally {
+    isTrSearch.value = false;
+  }
+};
+
+const searchTrSelectAction = useDebounceFn(async (q: string = "") => {
+  if (!searchTrList.value.some((tr) => tr.code == q)) {
+    await searchTr(q);
+  }
+}, 1000);
+
+/**
+ * end: Time Record
+ */
+
+/**
+ * start: Form
+ */
+
+const isFetching = ref(false);
+
+const disableInputs = computed(() => {
+  return isFetching.value;
+});
+
+const submitIsDisabled = computed(() => {
+  if (formOptions.isBind && !formValues.id) return true;
+  return isFetching.value;
+});
+
+const onSubmit = handleSubmit((value) => {
+  const dto: RecordSharedDto = {
+    title: value.title || "",
+    description: value.description || "",
+    code: value.code,
+    externalLink: value.externalLink,
+    timerSessionType: value.timerSessionType,
+    timerSessionFrom: value.timerSessionFrom,
+  };
+
+  value.id && isEditMode.value
+    ? updateAction({ ...dto, id: value.id })
+    : createAction({
+        ...dto,
+        periods:
+          value.periods?.map(({ start, end }) => ({
+            start,
+            end,
+          })) || [],
+      });
+});
+
+const isEditMode = computed(() => {
+  return Boolean(
+    props.editObject && (props.editObject.id || props.editObject.isBind),
+  );
+});
+
+const isSyncMode = computed(() => {
+  return Boolean(
+    props.editObject &&
+    (props.editObject.id || props.editObject.isBind) &&
+    props.editObject.isSync,
+  );
+});
+
+/**
+ * start: End
+ */
+
+/**
+ * start: Http
+ */
+
+const createAction = async (dto: CreateRecordDto) => {
+  try {
+    isFetching.value = true;
+    const result = await postRecord({
+      ...dto,
+      categoryId: await handleCategory(),
+    });
+
+    if (formOptions.callback) formOptions.callback(result?.code);
+
+    closeModal(props.refreshRecords);
+    OkToast(_$t("createRecordSuccess"));
+
+    router.push({ name: "record", params: { code: result?.code } });
+  } catch (error) {
+    ErrorToast(error);
+  } finally {
+    isFetching.value = false;
+  }
+};
+
+const updateAction = async (dto: UpdateRecordDto) => {
+  try {
+    isFetching.value = true;
+
+    if (isSyncMode.value && formValues.id) {
+      await postPeriodList(formValues.id, {
+        periods:
+          formValues.periods?.map((tp) => ({
+            start: new Date(tp.start),
+            end: new Date(tp.end),
+          })) || [],
+        type: formValues.timerSessionType!,
+        from: formValues.timerSessionFrom!,
+      });
+
+      if (formOptions.callback) formOptions.callback();
+    } else {
+      const result = await putRecord({
+        ...dto,
+        id: formValues.id!,
+        categoryId: await handleCategory(),
+      });
+
+      if (formOptions.callback) formOptions.callback(result?.code);
+    }
+
+    closeModal(props.refreshRecords);
+
+    OkToast(_$t("updateRecordSuccess"));
+  } catch (error) {
+    ErrorToast(error);
+  } finally {
+    isFetching.value = false;
+  }
+};
+
+/**
+ * end: Http
+ */
+
+/**
+ * start: Modal
+ */
+
+const closeModal = (refresh = false) => {
+  emit("close");
+  if (refresh) {
+    trStore.refetchData();
+  }
+};
+
+/**
+ * end: Modal
+ */
+
+onMounted(async () => {
+  if (props.editObject) {
+    setValues({
+      id: props.editObject.id,
+      title: props.editObject.title,
+      description: props.editObject.description,
+      category: props.editObject.category,
+      code: props.editObject.code,
+      externalLink: props.editObject.externalLink,
+    });
+
+    formOptions.callback = props.editObject.callback;
+    formOptions.isSync = props.editObject.isSync;
+    formOptions.isBind = props.editObject.isBind;
+
+    if (!props.hidePeriods) {
+      setValues({
+        periods: props.editObject.periods.map((tp) => ({
+          id: uuidv4(),
+          start: new Date(tp.start),
+          end: new Date(tp.end),
+        })),
+      });
+    }
+
+    if (isSyncMode) {
+      setValues({
+        timerSessionType: props.editObject?.timerSessionType,
+        timerSessionFrom: props.editObject?.timerSessionFrom,
+      });
+
+      await searchTr();
+    }
+  }
+
+  if (!isSyncMode.value) {
+    fetchData(closeModal);
+  }
+});
+</script>
+
+<template>
+  <form @submit="onSubmit" class="space-y-4">
+    <template v-if="formOptions.isBind">
+      <FormField name="id">
+        <FormItem>
+          <FormLabel>Tarefa</FormLabel>
+
+          <Combobox v-model="selectedTr">
+            <FormControl>
+              <ComboboxAnchor as-child>
+                <ComboboxTrigger as-child>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    class="w-full"
+                    :disabled="isTrSearch || disableInputs"
+                  >
+                    <section class="flex w-full justify-between">
+                      {{
+                        selectedTr?.title || selectedTr?.code || "Selecionar"
+                      }}
+
+                      <ChevronsUpDown
+                        class="ml-2 h-4 w-4 shrink-0 opacity-50"
+                      />
+                    </section>
+                  </Button>
+                </ComboboxTrigger>
+              </ComboboxAnchor>
+            </FormControl>
+
+            <ComboboxList align="start">
+              <div class="relative w-full items-center">
+                <ComboboxInput
+                  :display-value="(val) => val?.code"
+                  class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10"
+                  maxlength="20"
+                  placeholder="Buscar..."
+                  @update:modelValue="searchTrSelectAction($event)"
+                />
+
+                <span
+                  class="absolute start-0 inset-y-0 flex items-center justify-center px-3"
+                >
+                  <Search class="size-4 text-muted-foreground" />
+                </span>
+              </div>
+
+              <ComboboxEmpty> Nada encontrado. </ComboboxEmpty>
+
+              <ComboboxGroup>
+                <ComboboxItem
+                  v-for="tr in searchTrList"
+                  :key="tr.id"
+                  :value="tr"
+                  @click="setValues({ id: tr.id })"
+                >
+                  {{ tr.title }}
+
+                  <ComboboxItemIndicator>
+                    <Check :class="cn('ml-auto h-4 w-4')" />
+                  </ComboboxItemIndicator>
+                </ComboboxItem>
+              </ComboboxGroup>
+            </ComboboxList>
+          </Combobox>
+
+          <FormMessage />
+        </FormItem>
+      </FormField>
+    </template>
+
+    <section v-if="!hidePeriods" class="flex justify-between">
+      <h3>{{ _$t("periods") }}</h3>
+
+      <Button
+        v-if="!isSyncMode"
+        :disabled="addButtonIsDisabled || disableInputs"
+        size="sm"
+        type="button"
+        @click="addPeriodToForm"
+      >
+        {{ _$t("add") }}
+      </Button>
+    </section>
+
+    <section
+      v-if="!hidePeriods && formValues.periods && formValues.periods.length"
+      v-for="(tp, index) in formValues.periods"
+      :key="tp.id"
+      class="flex flex-row items-end gap-4 relative dark:border-gray-800 border-b-2 pb-3"
+    >
+      <FormField v-slot="{ componentField }" :name="`periods[${index}].start`">
+        <FormItem>
+          <FormLabel>{{ _$t("startOfPeriod") }}</FormLabel>
+          <FormControl>
+            <GDatePicker
+              v-bind="componentField"
+              :min="index !== 0 ? formValues.periods[index - 1].end : ''"
+              :disabled="disableInputs || isSyncMode"
+              class="py-1"
+              @change="formValues.periods[index].end = $event"
+            />
+          </FormControl>
+        </FormItem>
+      </FormField>
+
+      <FormField v-slot="{ componentField }" :name="`periods[${index}].end`">
+        <FormItem>
+          <FormLabel>{{ _$t("endOfPeriod") }}</FormLabel>
+          <FormControl>
+            <GDatePicker
+              v-bind="componentField"
+              :min="formValues.periods[index].start"
+              :disabled="disableInputs || isSyncMode"
+              class="py-1"
+            />
+          </FormControl>
+        </FormItem>
+      </FormField>
+
+      <Button
+        v-if="!isSyncMode"
+        :disabled="disableInputs"
+        type="button"
+        variant="outline"
+        class="h-11 pb-1 mb-1"
+        @click="deletePeriodFromForm(index)"
+      >
+        <X />
+      </Button>
+    </section>
+
+    <template v-if="!isSyncMode">
+      <FormField v-slot="{ componentField }" name="name">
+        <FormItem>
+          <FormLabel>{{ _$t("name") }}</FormLabel>
+          <FormControl>
+            <Input
+              v-bind="componentField"
+              :disabled="disableInputs"
+              type="text"
+              maxlength="120"
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+
+      <FormField v-slot="{ componentField }" name="code">
+        <FormItem>
+          <FormLabel>{{ _$t("code") }}</FormLabel>
+
+          <FormDescription>
+            {{ _$t("codeFormDescription") }}
+          </FormDescription>
+
+          <FormControl>
+            <Input
+              v-bind="componentField"
+              type="text"
+              v-maska="{
+                mask: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                tokens: {
+                  X: {
+                    pattern: /[a-zA-Z0-9-]/,
+                    transform: (v: string) => v.toLowerCase(),
+                  },
+                },
+              }"
+              :disabled="disableInputs"
+            />
+          </FormControl>
+
+          <FormMessage />
+        </FormItem>
+      </FormField>
+
+      <FormField v-slot="{ componentField }" name="category">
+        <FormItem>
+          <FormLabel>{{ _$t("category") }}</FormLabel>
+
+          <Combobox
+            v-bind="componentField"
+            v-model="categoryValue"
+            :open="categorySelectIsOpen"
+            class="w-full"
+            by="label"
+            @update:open="categorySelectIsOpen = $event"
+          >
+            <FormControl>
+              <ComboboxAnchor as-child>
+                <ComboboxTrigger as-child>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    class="w-full"
+                    :disabled="categoryIsDisabled || disableInputs"
+                  >
+                    <section class="flex w-full justify-between">
+                      {{ categoryValue || "Selecionar" }}
+
+                      <ChevronsUpDown
+                        class="ml-2 h-4 w-4 shrink-0 opacity-50"
+                      />
+                    </section>
+                  </Button>
+                </ComboboxTrigger>
+              </ComboboxAnchor>
+            </FormControl>
+
+            <ComboboxList align="start">
+              <div class="relative w-full items-center">
+                <ComboboxInput
+                  v-model="categorySelectSearch"
+                  maxlength="20"
+                  class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10"
+                  placeholder="Buscar..."
+                />
+
+                <span
+                  class="absolute start-0 inset-y-0 flex items-center justify-center px-3"
+                >
+                  <Search class="size-4 text-muted-foreground" />
+                </span>
+              </div>
+
+              <ComboboxEmpty>
+                <section class="flex flex-col gap-2 items-center">
+                  <span>
+                    Nenhuma categoria... <br />
+                    Clique abaixo para criar:
+                  </span>
+
+                  <Button
+                    type="button"
+                    variant="link"
+                    @click="
+                      categorySelectIsOpen = false;
+                      categoryValue = categorySelectSearch;
+                    "
+                  >
+                    "{{ categorySelectSearch }}"
+                  </Button>
+                </section>
+              </ComboboxEmpty>
+
+              <ComboboxGroup>
+                <ComboboxItem
+                  v-for="category in categories"
+                  :key="category.name"
+                  :value="category.name"
+                  @click="clearCategoryIfClickAgain(category.name)"
+                >
+                  {{ category.name }}
+
+                  <ComboboxItemIndicator>
+                    <Check :class="cn('ml-auto h-4 w-4')" />
+                  </ComboboxItemIndicator>
+                </ComboboxItem>
+
+                <ComboboxItem
+                  v-if="isNewCategoryOnSelectSearch && categorySelectSearch"
+                  :value="categorySelectSearch"
+                >
+                  <span class="flex gap-2">
+                    <PenLine /> Criar: "{{ categorySelectSearch }}"
+                  </span>
+                </ComboboxItem>
+              </ComboboxGroup>
+            </ComboboxList>
+          </Combobox>
+
+          <FormMessage />
+        </FormItem>
+      </FormField>
+
+      <FormField v-slot="{ componentField }" name="description">
+        <FormItem>
+          <FormLabel>{{ _$t("description") }}</FormLabel>
+          <FormControl>
+            <Textarea
+              v-bind="componentField"
+              :disabled="disableInputs"
+              maxlength="240"
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+
+      <FormField v-slot="{ componentField }" name="externalLink">
+        <FormItem>
+          <FormLabel>{{ _$t("externalLink") }}</FormLabel>
+          <FormDescription>
+            {{ "Da sua tarefa ou alguma url que queira fixar." }}
+          </FormDescription>
+          <FormControl>
+            <Input
+              v-bind="componentField"
+              :disabled="disableInputs"
+              type="text"
+            />
+          </FormControl>
+
+          <FormMessage />
+        </FormItem>
+      </FormField>
+    </template>
+
+    <Button
+      :disabled="submitIsDisabled"
+      :loading="isFetching"
+      class="w-full mt-2"
+      type="submit"
+    >
+      <template #with-loading>
+        {{
+          isSyncMode
+            ? formOptions.isBind
+              ? _$t("bind")
+              : _$t("sync")
+            : _$t("send")
+        }}
+      </template>
+    </Button>
+  </form>
+</template>
