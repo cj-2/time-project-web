@@ -1,4 +1,4 @@
-export type TimePeriodMap = {
+export type PeriodMap = {
   periodId: number;
   recordId: number;
   start: string;

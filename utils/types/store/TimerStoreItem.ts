@@ -2,8 +2,8 @@ export interface TimerStoreItem {
   id: number | null;
   code?: string;
 
-  currentPeriodList: TimePeriodTimer[];
-  currentPeriod: TimePeriodTimer;
+  currentPeriodList: PeriodTimer[];
+  currentPeriod: PeriodTimer;
 
   isRun: boolean;
   isFetch: boolean;

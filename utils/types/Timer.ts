@@ -1,6 +1,6 @@
 export type TimerTypes = "timer" | "pomodoro" | "break";
 
-export type TimePeriodTimer = {
+export type PeriodTimer = {
   start: number;
   end: number;
 };

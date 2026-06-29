@@ -9,7 +9,7 @@ export interface TimeRecordSharedDto {
 }
 
 export interface CreateTimeRecordDto extends TimeRecordSharedDto {
-  timePeriods: { start: Date | string; end: Date | string }[];
+  periods: { start: Date | string; end: Date | string }[];
 }
 
 export interface UpdateTimeRecordDto extends TimeRecordSharedDto {

@@ -1,6 +1,6 @@
 export type TimerSessionMap = {
   sessionId: number;
   type: string;
-  periods: TimePeriodMap[];
+  periods: PeriodMap[];
   formattedTime: string;
 };

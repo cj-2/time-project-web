@@ -5,9 +5,9 @@ import { Trash2, Info } from "lucide-vue-next";
 
 import {
   tpModal,
-  createTimePeriod,
-  editTimePeriod,
-  closeTimePeriodModal,
+  createPeriod,
+  editPeriod,
+  closePeriodModal,
   deleteTpModal,
   openDeleteTpModal,
   closeDeleteTpModal,
@@ -23,7 +23,7 @@ import {
 } from "./day-list/modal";
 
 import {
-  deleteTimePeriodAction,
+  deletePeriodAction,
   deleteTpIsFetch,
   deleteTsIsFetch,
   deleteTimerSessionAction,
@@ -126,7 +126,7 @@ const chartOptions = computed(() => {
 });
 
 const deleteTpAction = () => {
-  return deleteTimePeriodAction(
+  return deletePeriodAction(
     deleteTpModal.id,
     closeDeleteTpModal,
     props.callback,
@@ -149,10 +149,10 @@ const deleteTmAction = () => {
   );
 };
 
-const closeTimePeriodCallback = async (refresh = false) => {
+const closePeriodCallback = async (refresh = false) => {
   if (props.callback) await props.callback();
 
-  await closeTimePeriodModal(() => getData(), refresh);
+  await closePeriodModal(() => getData(), refresh);
 };
 
 const closeTimeMinuteCallback = async (refresh = false) => {
@@ -229,10 +229,10 @@ defineExpose({
             @open="createTimeMinute"
           />
 
-          <TimePeriodButtonAdd
+          <PeriodButtonAdd
             :time-record-id="timeRecordId"
             :disabled="isFetchNow"
-            @open="createTimePeriod"
+            @open="createPeriod"
           />
         </div>
       </section>
@@ -442,9 +442,9 @@ defineExpose({
                   <Separator class="my-2" label="Ações" />
 
                   <section>
-                    <TimePeriodButtonEdit
+                    <PeriodButtonEdit
                       :time-period="period"
-                      @open="editTimePeriod"
+                      @open="editPeriod"
                     />
 
                     <Button
@@ -547,10 +547,10 @@ defineExpose({
         </DialogDescription>
       </DialogHeader>
 
-      <TimePeriodFormCreateAndUpdate
+      <PeriodFormCreateAndUpdate
         :time-record-id="tpModal.timeRecordId"
         :edit-object="tpModal.form"
-        @close="closeTimePeriodCallback"
+        @close="closePeriodCallback"
       />
     </DialogContent>
   </Dialog>
@@ -577,7 +577,7 @@ defineExpose({
   <GModalConfirm
     v-model:open="deleteTpModal.open"
     :isFetch="deleteTpIsFetch"
-    :title="_$t('confirmDeleteTimePeriodMessage')"
+    :title="_$t('confirmDeletePeriodMessage')"
     @confirm="deleteTpAction"
     @cancel="closeDeleteTpModal"
   />

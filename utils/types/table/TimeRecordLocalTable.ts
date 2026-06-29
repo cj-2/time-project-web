@@ -1,6 +1,6 @@
 export interface TimeRecordLocalTable {
   timeRecordDate: string;
-  timePeriods: TimePeriodLocal[];
+  periods: PeriodLocal[];
   formattedTime: string;
   code: string | undefined;
   id: number | null;

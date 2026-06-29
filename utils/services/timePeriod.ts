@@ -1,41 +1,38 @@
-export const getTimePeriod = async (
+export const getPeriod = async (
   timeRecordId: number,
-  pagQuery: IPaginationQuery
+  pagQuery: IPaginationQuery,
 ) => {
-  return useCustomFetch()<Pagination<TimePeriodMap>>(
+  return useCustomFetch()<Pagination<PeriodMap>>(
     `/periods/${timeRecordId}?page=${pagQuery.page}&perPage=${pagQuery.perPage}`,
-    { method: "GET" }
+    { method: "GET" },
   );
 };
 
-export const postTimePeriod = async (body: TimePeriodDto) => {
-  return useCustomFetch(false)<TimePeriodMap>("/periods", {
+export const postPeriod = async (body: PeriodDto) => {
+  return useCustomFetch(false)<PeriodMap>("/periods", {
     method: "POST",
     body,
   });
 };
 
-export const postTimePeriodList = async (
+export const postPeriodList = async (
   timeRecordId: number,
-  body: TimePeriodListDto
+  body: PeriodListDto,
 ) => {
-  return useCustomFetch(false)<TimePeriodDto[]>(
-    `/periods/list/${timeRecordId}`,
-    {
-      method: "POST",
-      body,
-    }
-  );
+  return useCustomFetch(false)<PeriodDto[]>(`/periods/list/${timeRecordId}`, {
+    method: "POST",
+    body,
+  });
 };
 
-export const putTimePeriod = async (id: number, body: TimePeriodDto) => {
-  return useCustomFetch(false)<TimePeriodMap>(`/periods/${id}`, {
+export const putPeriod = async (id: number, body: PeriodDto) => {
+  return useCustomFetch(false)<PeriodMap>(`/periods/${id}`, {
     method: "PUT",
     body,
   });
 };
 
-export const deleteTimePeriod = async (id: number) => {
+export const deletePeriod = async (id: number) => {
   return useCustomFetch(false)<boolean>(`/periods/${id}`, {
     method: "DELETE",
   });

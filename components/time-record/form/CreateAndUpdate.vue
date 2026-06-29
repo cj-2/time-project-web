@@ -14,7 +14,7 @@ const emit = defineEmits(["close", "refresh"]);
 const props = withDefaults(
   defineProps<{
     editObject?: TimeRecordForm;
-    hideTimePeriods?: boolean;
+    hidePeriods?: boolean;
     refreshTimeRecords?: boolean;
   }>(),
   {},
@@ -42,7 +42,7 @@ const formSchema = toTypedSchema(
   yup.object({
     id: yup.number(),
     title: yup.string(),
-    timePeriods: yup.array(
+    periods: yup.array(
       yup.object({
         id: yup.string().required(),
         start: yup.date().required(),
@@ -76,7 +76,7 @@ const {
     description: "",
     timerSessionType: "manual",
     timerSessionFrom: "browser",
-    timePeriods: [],
+    periods: [],
   },
 });
 
@@ -165,35 +165,29 @@ const clearCategoryIfClickAgain = (value: string) => {
 const addButtonIsDisabled = computed(() => {
   const initialValue = true;
 
-  const allHasValue = formValues.timePeriods?.reduce((acc, current) => {
+  const allHasValue = formValues.periods?.reduce((acc, current) => {
     return !!current.start && !!current.end && acc;
   }, initialValue);
 
   return allHasValue === false;
 });
 
-const addTimePeriodToForm = () => {
+const addPeriodToForm = () => {
   const start =
-    formValues?.timePeriods?.length === 0
+    formValues?.periods?.length === 0
       ? new Date()
-      : addMinutes(
-          formValues.timePeriods![formValues.timePeriods!.length - 1].end,
-          15,
-        );
+      : addMinutes(formValues.periods![formValues.periods!.length - 1].end, 15);
 
   const end = addMinutes(start, 25);
 
-  const timePeriods = [
-    ...(formValues.timePeriods ?? []),
-    { start, end, id: uuidv4() },
-  ];
-  setValues({ timePeriods });
+  const periods = [...(formValues.periods ?? []), { start, end, id: uuidv4() }];
+  setValues({ periods });
 };
 
-const deleteTimePeriodFromForm = (index: number) => {
-  const timePeriods = formValues.timePeriods ? [...formValues.timePeriods] : [];
-  timePeriods.splice(index, 1);
-  setValues({ timePeriods });
+const deletePeriodFromForm = (index: number) => {
+  const periods = formValues.periods ? [...formValues.periods] : [];
+  periods.splice(index, 1);
+  setValues({ periods });
 };
 
 /**
@@ -265,8 +259,8 @@ const onSubmit = handleSubmit((value) => {
     ? updateAction({ ...dto, id: value.id })
     : createAction({
         ...dto,
-        timePeriods:
-          value.timePeriods?.map(({ start, end }) => ({
+        periods:
+          value.periods?.map(({ start, end }) => ({
             start,
             end,
           })) || [],
@@ -321,9 +315,9 @@ const updateAction = async (dto: UpdateTimeRecordDto) => {
     isFetching.value = true;
 
     if (isSyncMode.value && formValues.id) {
-      await postTimePeriodList(formValues.id, {
-        timePeriods:
-          formValues.timePeriods?.map((tp) => ({
+      await postPeriodList(formValues.id, {
+        periods:
+          formValues.periods?.map((tp) => ({
             start: new Date(tp.start),
             end: new Date(tp.end),
           })) || [],
@@ -386,9 +380,9 @@ onMounted(async () => {
     formOptions.isSync = props.editObject.isSync;
     formOptions.isBind = props.editObject.isBind;
 
-    if (!props.hideTimePeriods) {
+    if (!props.hidePeriods) {
       setValues({
-        timePeriods: props.editObject.timePeriods.map((tp) => ({
+        periods: props.editObject.periods.map((tp) => ({
           id: uuidv4(),
           start: new Date(tp.start),
           end: new Date(tp.end),
@@ -484,7 +478,7 @@ onMounted(async () => {
       </FormField>
     </template>
 
-    <section v-if="!hideTimePeriods" class="flex justify-between">
+    <section v-if="!hidePeriods" class="flex justify-between">
       <h3>{{ _$t("periods") }}</h3>
 
       <Button
@@ -492,50 +486,40 @@ onMounted(async () => {
         :disabled="addButtonIsDisabled || disableInputs"
         size="sm"
         type="button"
-        @click="addTimePeriodToForm"
+        @click="addPeriodToForm"
       >
         {{ _$t("add") }}
       </Button>
     </section>
 
     <section
-      v-if="
-        !hideTimePeriods &&
-        formValues.timePeriods &&
-        formValues.timePeriods.length
-      "
-      v-for="(tp, index) in formValues.timePeriods"
+      v-if="!hidePeriods && formValues.periods && formValues.periods.length"
+      v-for="(tp, index) in formValues.periods"
       :key="tp.id"
       class="flex flex-row items-end gap-4 relative dark:border-gray-800 border-b-2 pb-3"
     >
-      <FormField
-        v-slot="{ componentField }"
-        :name="`timePeriods[${index}].start`"
-      >
+      <FormField v-slot="{ componentField }" :name="`periods[${index}].start`">
         <FormItem>
           <FormLabel>{{ _$t("startOfPeriod") }}</FormLabel>
           <FormControl>
             <GDatePicker
               v-bind="componentField"
-              :min="index !== 0 ? formValues.timePeriods[index - 1].end : ''"
+              :min="index !== 0 ? formValues.periods[index - 1].end : ''"
               :disabled="disableInputs || isSyncMode"
               class="py-1"
-              @change="formValues.timePeriods[index].end = $event"
+              @change="formValues.periods[index].end = $event"
             />
           </FormControl>
         </FormItem>
       </FormField>
 
-      <FormField
-        v-slot="{ componentField }"
-        :name="`timePeriods[${index}].end`"
-      >
+      <FormField v-slot="{ componentField }" :name="`periods[${index}].end`">
         <FormItem>
           <FormLabel>{{ _$t("endOfPeriod") }}</FormLabel>
           <FormControl>
             <GDatePicker
               v-bind="componentField"
-              :min="formValues.timePeriods[index].start"
+              :min="formValues.periods[index].start"
               :disabled="disableInputs || isSyncMode"
               class="py-1"
             />
@@ -549,7 +533,7 @@ onMounted(async () => {
         type="button"
         variant="outline"
         class="h-11 pb-1 mb-1"
-        @click="deleteTimePeriodFromForm(index)"
+        @click="deletePeriodFromForm(index)"
       >
         <X />
       </Button>

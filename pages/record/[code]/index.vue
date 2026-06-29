@@ -12,7 +12,7 @@ definePageMeta({
         actualTimeRecordId,
         updatedOn,
         clearUpdatedOn,
-        refreshTimePeriodCallback,
+        refreshPeriodCallback,
         timeRecord,
       }"
     >
@@ -22,7 +22,7 @@ definePageMeta({
           v-if="actualTimeRecordId"
           :time-record-id="actualTimeRecordId"
           :time-record="timeRecord"
-          :callback="refreshTimePeriodCallback"
+          :callback="refreshPeriodCallback"
           :updated-on="updatedOn"
           :clear-updated-on="clearUpdatedOn"
         />

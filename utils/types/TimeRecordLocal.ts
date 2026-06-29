@@ -5,12 +5,12 @@ export interface TimeRecordLocal {
   title: string;
   description: string;
   timeRecordDate: string;
-  timePeriods: TimePeriodLocal[];
+  periods: PeriodLocal[];
   timerSessionType?: string;
   timerSessionFrom?: string;
 }
 
-export type TimePeriodLocal = {
+export type PeriodLocal = {
   start: Date;
   end: Date;
 };

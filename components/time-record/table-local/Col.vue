@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 defineProps<{
-  timePeriods: TimePeriodMap[] | TimePeriodLocal[];
+  periods: PeriodMap[] | PeriodLocal[];
   label: string;
 }>();
 </script>
 
 <template>
-  <section v-if="timePeriods.length === 0">
+  <section v-if="periods.length === 0">
     <span>{{ label }}</span>
   </section>
 
@@ -19,11 +19,11 @@ defineProps<{
       <HoverCardContent align="center">
         <div class="flex gap-2">
           <Badge
-            v-for="timePeriod in timePeriods"
-            :title="formatTimePeriodPopper(timePeriod).date"
+            v-for="timePeriod in periods"
+            :title="formatPeriodPopper(timePeriod).date"
             variant="outline"
           >
-            {{ formatTimePeriodPopper(timePeriod).formatted }}
+            {{ formatPeriodPopper(timePeriod).formatted }}
           </Badge>
         </div>
       </HoverCardContent>

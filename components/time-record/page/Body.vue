@@ -77,7 +77,7 @@ const links = computed(() => [
   },
 ]);
 
-const refreshTimePeriodCallback = async () => {
+const refreshPeriodCallback = async () => {
   setUpdatedOn();
   refreshTimeRecord();
 };
@@ -106,7 +106,7 @@ const refreshTimePeriodCallback = async () => {
               :id="actualTimeRecordId"
               :code="timeRecord.code"
               :title="timeRecord.name"
-              :post-time-period-callback="refreshTimePeriodCallback"
+              :post-time-period-callback="refreshPeriodCallback"
             />
 
             <template #fallback>
@@ -159,7 +159,7 @@ const refreshTimePeriodCallback = async () => {
             isLoading,
             updatedOn,
             clearUpdatedOn,
-            refreshTimePeriodCallback,
+            refreshPeriodCallback,
             timeRecord,
           }"
         ></slot>

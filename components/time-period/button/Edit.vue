@@ -2,14 +2,14 @@
 import { Edit } from "lucide-vue-next";
 
 const props = defineProps<{
-  timePeriod: TimePeriodMap;
+  timePeriod: PeriodMap;
 }>();
 
 const emit = defineEmits<{
-  open: [value: TimePeriodForm];
+  open: [value: PeriodForm];
 }>();
 
-const editData = reactive<TimePeriodForm>({
+const editData = reactive<PeriodForm>({
   id: 0,
   timeRecordId: 0,
   end: "",

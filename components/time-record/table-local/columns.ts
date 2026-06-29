@@ -8,16 +8,16 @@ export const columns: ColumnDef<TimeRecordLocalTable>[] = [
     header: () => h("div", { variant: "ghost" }, ["Data"]),
   },
   {
-    accessorKey: "timePeriods",
+    accessorKey: "periods",
     header: () => h("div", { variant: "ghost" }, ["Períodos"]),
     cell: ({ row }) =>
       h(
         "div",
         { class: "text-right" },
         h(Col, {
-          label: timePeriodLabel(row.original.timePeriods.length),
-          timePeriods: row.original.timePeriods,
-        })
+          label: timePeriodLabel(row.original.periods.length),
+          periods: row.original.periods,
+        }),
       ),
   },
   {

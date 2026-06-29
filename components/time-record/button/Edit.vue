@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Edit } from "lucide-vue-next";
+import { _$t } from "~/utils/i18n";
 const editTimeRecordObject = ref<TimeRecordForm>();
 
 const props = defineProps<{
@@ -26,7 +27,7 @@ const openTimeRecordModal = () => {
     category: tr.categoryName || "",
     code: tr.code || "",
     externalLink: tr.externalLink || "",
-    timePeriods: [],
+    periods: [],
     callback: props.callback,
   };
 };

@@ -8,22 +8,22 @@ const timerStore = useTimerStore();
 const props = withDefaults(
   defineProps<{
     id: number | null;
-    postTimePeriodCallback: (code: string) => void;
+    postPeriodCallback: (code: string) => void;
   }>(),
   {
     id: null,
-    postTimePeriodCallback: (code = "") => {},
-  }
+    postPeriodCallback: (code = "") => {},
+  },
 );
 
 const timer = computed(() => timerStore.getTimer(props.id));
 
 const timeRecords = computed<TimeRecordLocalTable[]>(() =>
-  timerStore.getTimeRecords(props.id)
+  timerStore.getTimeRecords(props.id),
 );
 
 const totalPages = computed(() =>
-  Math.ceil(timer.value.localRecords.length / timerStore._perPage)
+  Math.ceil(timer.value.localRecords.length / timerStore._perPage),
 );
 
 const modal = reactive({ open: false });
@@ -46,7 +46,7 @@ watch(
   () => timer.value.localRecords.length,
   (newTotalPages) => {
     if (timer.value.page > newTotalPages) timer.value.page = newTotalPages;
-  }
+  },
 );
 
 const closeConfirmDeleteModal = () => {
@@ -69,7 +69,7 @@ const deleteAction = () => {
 const openModal = (
   timeRecord: TimeRecordLocal,
   isSync = false,
-  isBind = false
+  isBind = false,
 ) => {
   if (!timeRecord) return;
 
@@ -77,8 +77,8 @@ const openModal = (
     { ...timeRecord, isSync, isBind },
     () => {
       timerStore.deleteTimeRecordLocal(timeRecord.localUuid, props.id);
-      props.postTimePeriodCallback(timeRecord.code || "");
-    }
+      props.postPeriodCallback(timeRecord.code || "");
+    },
   );
 
   modal.open = true;

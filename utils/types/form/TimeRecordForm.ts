@@ -5,7 +5,7 @@ export type TimeRecordForm = {
   category: string;
   code: string;
   externalLink?: string;
-  timePeriods: { start: Date | string; end: Date | string }[];
+  periods: { start: Date | string; end: Date | string }[];
   isSync?: boolean;
   isBind?: boolean;
   timerSessionType?: string;

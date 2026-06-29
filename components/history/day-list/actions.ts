@@ -1,19 +1,19 @@
 export const getIsFetch = ref(false);
 export const deleteTpIsFetch = ref(false);
 
-export const deleteTimePeriodAction = async (
+export const deletePeriodAction = async (
   timePeriodId: number,
   closeModalMethod: () => void = () => {},
-  callback: (() => Promise<void>) | undefined = undefined
+  callback: (() => Promise<void>) | undefined = undefined,
 ) => {
   deleteTpIsFetch.value = true;
 
   const { refetchData } = useTimeRecordHistoryStore();
 
   try {
-    await deleteTimePeriod(timePeriodId);
+    await deletePeriod(timePeriodId);
 
-    OkToast(useNuxtApp().$i18n.t("deleteTimePeriodSuccess"));
+    OkToast(useNuxtApp().$i18n.t("deletePeriodSuccess"));
 
     await refetchData();
     if (callback) await callback();
@@ -31,7 +31,7 @@ export const deleteTsIsFetch = ref(false);
 export const deleteTimerSessionAction = async (
   timerSessionId: number,
   closeModalMethod: () => void = () => {},
-  callback: (() => Promise<void>) | undefined = undefined
+  callback: (() => Promise<void>) | undefined = undefined,
 ) => {
   deleteTsIsFetch.value = true;
 
@@ -58,7 +58,7 @@ export const deleteTmIsFetch = ref(false);
 export const deleteTimeMinuteAction = async (
   minuteId: number,
   closeModalMethod: () => void = () => {},
-  callback: (() => Promise<void>) | undefined = undefined
+  callback: (() => Promise<void>) | undefined = undefined,
 ) => {
   deleteTmIsFetch.value = true;
 

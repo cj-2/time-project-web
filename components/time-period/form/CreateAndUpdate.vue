@@ -8,17 +8,17 @@ const emit = defineEmits(["close", "refresh"]);
 
 const props = withDefaults(
   defineProps<{
-    editObject?: TimePeriodForm;
+    editObject?: PeriodForm;
     timeRecordId?: number;
   }>(),
-  {}
+  {},
 );
 
 const formSchema = toTypedSchema(
   yup.object({
     start: yup.string().required('O campo "Início" é obrigatório.'),
     end: yup.string().required('O campo "Fim" é obrigatório.'),
-  })
+  }),
 );
 
 const closeModal = (refresh = false) => {
@@ -46,13 +46,13 @@ const createAction = async (start: string, end: string) => {
   let submitIsOk = true;
 
   try {
-    await postTimePeriod({
+    await postPeriod({
       timeRecordId: props.timeRecordId!,
       start: new Date(start),
       end: new Date(end),
     });
 
-    OkToast(_$t("createTimePeriodSuccess"));
+    OkToast(_$t("createPeriodSuccess"));
     closeModal(true);
   } catch (error) {
     submitIsOk = false;
@@ -71,7 +71,7 @@ const editAction = async (id: number, start: string, end: string) => {
   let submitIsOk = true;
 
   try {
-    await putTimePeriod(id, {
+    await putPeriod(id, {
       timeRecordId: props.timeRecordId!,
       start: new Date(start),
       end: new Date(end),
@@ -81,7 +81,7 @@ const editAction = async (id: number, start: string, end: string) => {
       props.editObject.callback();
     }
 
-    OkToast(_$t("updateTimePeriodSuccess"));
+    OkToast(_$t("updatePeriodSuccess"));
     closeModal(true);
   } catch (error) {
     submitIsOk = false;
@@ -121,7 +121,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 );
 
 var dateMax = ref(addMinutes(Date.now(), 10));

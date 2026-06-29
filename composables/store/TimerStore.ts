@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 
-export type PostTimePeriodCallback = (code: string) => Promise<void>;
+export type PostPeriodCallback = (code: string) => Promise<void>;
 
 const saveTimerStoreList = (list: TimerStoreItem[]) => {
   localStorage.setItem("timerStoreList", JSON.stringify(list));
@@ -22,7 +22,7 @@ export const useTimerStore = defineStore("TimerStore", {
     return {
       _timerList: [] as TimerStoreItem[],
       _perPage: 6,
-      _postTPCallback: null as null | PostTimePeriodCallback,
+      _postTPCallback: null as null | PostPeriodCallback,
 
       audioObject: null as null | HTMLAudioElement,
     };
@@ -90,7 +90,7 @@ export const useTimerStore = defineStore("TimerStore", {
 
       return timer.currentPeriodList.reduce(
         (acc, current) => acc + (current.end - current.start),
-        0
+        0,
       );
     },
 
@@ -115,9 +115,9 @@ export const useTimerStore = defineStore("TimerStore", {
       return timer.localRecords.slice(start, end).map((timeRecord) => {
         return {
           ...timeRecord,
-          timeRecordDate: format(timeRecord.timePeriods[0].start, "dd/MM/yyyy"),
-          timePeriods: timeRecord.timePeriods.map((e) => e),
-          formattedTime: formatTimePeriodListToString(timeRecord.timePeriods),
+          timeRecordDate: format(timeRecord.periods[0].start, "dd/MM/yyyy"),
+          periods: timeRecord.periods.map((e) => e),
+          formattedTime: formatPeriodListToString(timeRecord.periods),
           code: timeRecord.code,
         };
       });
@@ -133,7 +133,7 @@ export const useTimerStore = defineStore("TimerStore", {
     deleteTimeRecordLocal(uuid: string, id: number | null = null) {
       const timer = this.getTimer(id);
       const indexTimer = timer.localRecords.findIndex(
-        (r) => r.localUuid === uuid
+        (r) => r.localUuid === uuid,
       );
 
       if (indexTimer != -1) {
@@ -154,7 +154,7 @@ export const useTimerStore = defineStore("TimerStore", {
     defineIntervalTimer(
       id: number | null = null,
       interval = 1000,
-      clearInterval = false
+      clearInterval = false,
     ) {
       const timer = this.getTimer(id);
 
@@ -246,7 +246,7 @@ export const useTimerStore = defineStore("TimerStore", {
           title: "",
           description: "",
           timeRecordDate: new Date().toISOString(),
-          timePeriods: timer.currentPeriodList.map((p) => ({
+          periods: timer.currentPeriodList.map((p) => ({
             start: new Date(p.start),
             end: new Date(p.end),
           })),
@@ -260,8 +260,8 @@ export const useTimerStore = defineStore("TimerStore", {
         if (timer.id) {
           timer.isFetch = true;
 
-          postTimePeriodList(timer.id, {
-            timePeriods: timeRecord.timePeriods,
+          postPeriodList(timer.id, {
+            periods: timeRecord.periods,
             type: timer.type,
             from: "browser",
           })
@@ -323,7 +323,7 @@ export const useTimerStore = defineStore("TimerStore", {
       timer.breakPeriod = value;
     },
 
-    setPostTPCallback(callback: PostTimePeriodCallback) {
+    setPostTPCallback(callback: PostPeriodCallback) {
       this._postTPCallback = callback;
     },
 

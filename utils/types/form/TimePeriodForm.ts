@@ -1,4 +1,4 @@
-export type TimePeriodForm = {
+export type PeriodForm = {
   id?: number;
   start: Date | string;
   end: Date | string;

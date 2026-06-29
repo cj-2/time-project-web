@@ -1,11 +1,11 @@
-export type TimePeriodDto = {
+export type PeriodDto = {
   timeRecordId: number;
   start: Date;
   end: Date;
 };
 
-export type TimePeriodListDto = {
+export type PeriodListDto = {
   type: string;
   from: string;
-  timePeriods: { start: Date; end: Date }[];
+  periods: { start: Date; end: Date }[];
 };

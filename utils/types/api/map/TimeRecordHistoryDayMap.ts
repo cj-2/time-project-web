@@ -1,7 +1,7 @@
 export type TimeRecordHistoryDayMap = {
   date: string;
   count: number;
-  periods: TimePeriodMap[];
+  periods: PeriodMap[];
   periodsFormattedTime: string;
   sessions: TimerSessionMap[];
   sessionsFormattedTime: string;

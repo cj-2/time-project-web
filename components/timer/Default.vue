@@ -29,7 +29,7 @@ const props = defineProps({
     type: String,
     default: null,
   },
-  postTimePeriodCallback: {
+  postPeriodCallback: {
     type: Function,
     default: (code = "") => {},
   },
@@ -42,11 +42,11 @@ const timerStore = useTimerStore();
 const timer = computed(() => timerStore.getTimer(props.id));
 
 const timerHasMilliseconds = computed(
-  () => timerStore.getTotalMillisecondsPast(props.id) > 0
+  () => timerStore.getTotalMillisecondsPast(props.id) > 0,
 );
 
 const timerDoNotHasMilliseconds = computed(
-  () => timerStore.getTotalMillisecondsPast(props.id) === 0
+  () => timerStore.getTotalMillisecondsPast(props.id) === 0,
 );
 
 const timerLabelText = ref("");
@@ -56,7 +56,7 @@ const updateTimerLabelText = () => {
     timer.value.type == "pomodoro" || timer.value.type == "break"
       ? timerStore.getRegressiveMillisecondsNecessary(props.id) -
           timerStore.getTotalMillisecondsPast(props.id)
-      : timerStore.getTotalMillisecondsPast(props.id)
+      : timerStore.getTotalMillisecondsPast(props.id),
   );
 };
 
@@ -64,7 +64,7 @@ watch(
   () => timer.value.currentPeriod.end,
   (_) => {
     updateTimerLabelText();
-  }
+  },
 );
 
 const visibilityStateLabel = ref("");
@@ -87,10 +87,8 @@ useHead({
 
 timerStore.initTimerConfig(props.id, props.code);
 
-if (props.postTimePeriodCallback) {
-  timerStore.setPostTPCallback(
-    props.postTimePeriodCallback as PostTimePeriodCallback
-  );
+if (props.postPeriodCallback) {
+  timerStore.setPostTPCallback(props.postPeriodCallback as PostPeriodCallback);
 }
 
 const modal = reactive({
@@ -172,7 +170,7 @@ const endTimer = async () => {
 
   timerStore.pauseTimer(props.id);
 
-  const timePeriods = [
+  const periods = [
     ...timer.value.currentPeriodList.map((t) => ({
       start: new Date(t.start),
       end: new Date(t.end),
@@ -183,11 +181,11 @@ const endTimer = async () => {
     focusOnWindow();
     editTimeRecordObject.value = timeRecordLocalToForm(
       {
-        timePeriods,
+        periods,
         timerSessionType: timer.value.type,
         timerSessionFrom: "browser",
       },
-      () => timerStore.clearCurrentPeriodList(props.id)
+      () => timerStore.clearCurrentPeriodList(props.id),
     );
 
     modal.confirmPersistMethod.open = true;
@@ -199,8 +197,8 @@ const endTimer = async () => {
   try {
     submitIsFetch.value = true;
 
-    await postTimePeriodList(props.id, {
-      timePeriods,
+    await postPeriodList(props.id, {
+      periods,
       type: timer.value.type,
       from: "browser",
     });
@@ -218,8 +216,8 @@ const endTimer = async () => {
   } finally {
     submitIsFetch.value = false;
 
-    if (submitIsOk && props.postTimePeriodCallback) {
-      props.postTimePeriodCallback(props.code);
+    if (submitIsOk && props.postPeriodCallback) {
+      props.postPeriodCallback(props.code);
     }
   }
 };
@@ -392,7 +390,7 @@ onMounted(() => {
 
   document.addEventListener(
     "visibilitychange",
-    checkVisibilityAndUpdateTimerInterval
+    checkVisibilityAndUpdateTimerInterval,
   );
 
   if (timer.value.isRun) {
@@ -405,7 +403,7 @@ onBeforeUnmount(() => {
   clearInterval(offlineCheck);
   document.removeEventListener(
     "visibilitychange",
-    checkVisibilityAndUpdateTimerInterval
+    checkVisibilityAndUpdateTimerInterval,
   );
 });
 </script>
@@ -457,7 +455,7 @@ onBeforeUnmount(() => {
             timer.type == 'timer' && 'border-green-500',
             timer.type == 'break' && 'border-blue-500',
             isPipActive &&
-              'w-auto h-auto md:w-auto md:h-auto bg-transparent dark:bg-transparent dark:border-none'
+              'w-auto h-auto md:w-auto md:h-auto bg-transparent dark:bg-transparent dark:border-none',
           ),
         ]"
       >
@@ -481,7 +479,7 @@ onBeforeUnmount(() => {
           :class="
             cn(
               'flex flex-col gap-5 justify-center items-center relative',
-              isPipActive && 'gap-1'
+              isPipActive && 'gap-1',
             )
           "
         >
@@ -491,7 +489,7 @@ onBeforeUnmount(() => {
               :class="
                 cn(
                   'text-5xl font-bold',
-                  isPipActive && 'text-[22px] font-semibold'
+                  isPipActive && 'text-[22px] font-semibold',
                 )
               "
             >
@@ -509,7 +507,7 @@ onBeforeUnmount(() => {
               :class="
                 cn(
                   'text-5xl font-bold',
-                  isPipActive && 'text-[22px] font-semibold'
+                  isPipActive && 'text-[22px] font-semibold',
                 )
               "
             >
@@ -524,7 +522,7 @@ onBeforeUnmount(() => {
                 timer.type == 'pomodoro' && 'border-red-500',
                 timer.type == 'timer' && 'border-green-500',
                 timer.type == 'break' && 'border-blue-500',
-                isPipActive && 'gap-3 border-2 p-2 rounded-full'
+                isPipActive && 'gap-3 border-2 p-2 rounded-full',
               )
             "
           >
@@ -549,7 +547,7 @@ onBeforeUnmount(() => {
               :class="
                 cn(
                   'bg-yellow-500 hover:bg-yellow-600',
-                  isPipActive && 'w-8 h-8'
+                  isPipActive && 'w-8 h-8',
                 )
               "
               @click="pauseTimer"
@@ -703,7 +701,7 @@ onBeforeUnmount(() => {
       <TimeRecordTableLocal
         v-if="timer.localRecords.length"
         :id="props.id"
-        :postTimePeriodCallback="(code: string) => postTimePeriodCallback(code)"
+        :postPeriodCallback="(code: string) => postPeriodCallback(code)"
       />
 
       <p v-else class="py-3">
