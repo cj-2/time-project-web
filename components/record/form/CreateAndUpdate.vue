@@ -210,7 +210,7 @@ const searchTr = async (q: string = "") => {
 
     if (result) {
       searchTrList.value = result.map((item) => {
-        item.title = item.title ? `${item.title} (${item.code})` : item.code;
+        item.name = item.name ? `${item.name} (${item.code})` : item.code;
         return item;
       });
     }
@@ -425,9 +425,7 @@ onMounted(async () => {
                     :disabled="isTrSearch || disableInputs"
                   >
                     <section class="flex w-full justify-between">
-                      {{
-                        selectedTr?.title || selectedTr?.code || "Selecionar"
-                      }}
+                      {{ selectedTr?.name || selectedTr?.code || "Selecionar" }}
 
                       <ChevronsUpDown
                         class="ml-2 h-4 w-4 shrink-0 opacity-50"
@@ -460,11 +458,11 @@ onMounted(async () => {
               <ComboboxGroup>
                 <ComboboxItem
                   v-for="tr in searchTrList"
-                  :key="tr.id"
+                  :key="tr.recordId"
                   :value="tr"
-                  @click="setValues({ id: tr.id })"
+                  @click="setValues({ id: tr.recordId })"
                 >
-                  {{ tr.title }}
+                  {{ tr.name }}
 
                   <ComboboxItemIndicator>
                     <Check :class="cn('ml-auto h-4 w-4')" />

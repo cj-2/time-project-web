@@ -1,5 +1,5 @@
 export type SearchRecordItem = {
-  id: number;
-  title: string;
+  recordId: number;
+  name: string;
   code: string;
 };
